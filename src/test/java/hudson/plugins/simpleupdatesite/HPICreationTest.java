@@ -14,10 +14,13 @@ public class HPICreationTest {
 	@Test
 	public void testUpdateCenter() throws IOException {
 		UpdateSite site = new UpdateSite();
-		site.init(new File("./update"), "http://hudson02.nhncorp.com:9080/update");
-		File file = new File("./update/simpleupdatesite.json");
-		FileUtils.writeStringToFile(file, site.toUpdateCenterJSONString());
+		site.init(new File("./src/test/resources/tmp"), "http://hudson02.nhncorp.com:9080/update");
+		File file = File.createTempFile("temp", "json");
+		String updateCenterJSONString = site.toUpdateCenterJSONString();
+		FileUtils.writeStringToFile(file, updateCenterJSONString);
+		System.out.println(updateCenterJSONString);
 		assertThat(file.exists(), is(true));
 		assertThat(file.length(), greaterThan(200l));
+		file.delete();
 	}
 }
