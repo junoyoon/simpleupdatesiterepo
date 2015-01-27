@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package hudson.plugins.simpleupdatesite.util;
+package ru.lanwen.jenkins.juseppe.util;
 
 import java.util.Comparator;
 import java.util.StringTokenizer;

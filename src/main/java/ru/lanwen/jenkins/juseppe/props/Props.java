@@ -1,4 +1,4 @@
-package hudson.plugins.simpleupdatesite.props;
+package ru.lanwen.jenkins.juseppe.props;
 
 import ru.yandex.qatools.properties.PropertyLoader;
 import ru.yandex.qatools.properties.annotations.Property;
@@ -12,8 +12,10 @@ import java.net.URI;
  * Date: 25.01.15
  * Time: 20:38
  */
-@Resource.Classpath("updatesite.properties")
 public class Props {
+
+    public static final int UPDATE_CENTER_VERSION = 1;
+
 
     private Props() {
         PropertyLoader.populate(this);
@@ -23,20 +25,20 @@ public class Props {
         return new Props();
     }
 
-    @Property("update.center.plugins")
-    private String plugins = new File("/Users/lanwen/git/simpleupdatesiterepo/src/test/resources/tmp/plugins").getAbsolutePath();
+    @Property("update.center.plugins.dir")
+    private String plugins = new File("").getAbsolutePath();
 
-    @Property("update.center.saveto")
-    private String saveto = plugins;
+    @Property("update.center.saveto.dir")
+    private String saveto = new File("").getAbsolutePath();
 
-    @Property("update.center.name")
+    @Property("update.center.json.name")
     private String name = "update-center.json";
 
     @Property("jetty.port")
     private int port = 8080;
 
     @Property("update.center.baseurl")
-    private URI baseurl = URI.create("http://localhost:" + port);
+    private URI baseurl = URI.create("http://localhost:8080");
 
     @Property("update.center.id")
     private String ucId = "juseppe";

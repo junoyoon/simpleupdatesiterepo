@@ -1,4 +1,4 @@
-package hudson.plugins.simpleupdatesite.gen;
+package ru.lanwen.jenkins.juseppe.gen;
 
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;
@@ -20,6 +20,6 @@ public class GenStarter extends AbstractLifeCycle.AbstractLifeCycleListener {
 
     @Override
     public void lifeCycleStarted(LifeCycle event) {
-         UpdateSite.createUpdateSite(path.toFile()).save();
+         UpdateSiteGen.createUpdateSite(path.toFile()).save();
     }
 }

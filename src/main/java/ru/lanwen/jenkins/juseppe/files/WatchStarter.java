@@ -1,4 +1,4 @@
-package hudson.plugins.simpleupdatesite.files;
+package ru.lanwen.jenkins.juseppe.files;
 
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.component.LifeCycle;

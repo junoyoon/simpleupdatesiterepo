@@ -1,4 +1,4 @@
-package hudson.plugins.simpleupdatesite.files;
+package ru.lanwen.jenkins.juseppe.files;
 
 import com.google.common.base.Predicate;
 
