@@ -1,8 +1,13 @@
 /.settings
 /kbs
 /kbs_prepare
-/target
 /update
-/.classpath
-/.project
 /clover.license
+.classpath
+.project
+reports
+nbactions.xml
+target
+.idea
+*.iml
+.DS_Store

@@ -6,15 +6,16 @@ import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
+import hudson.plugins.simpleupdatesite.gen.UpdateSite;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 public class HPICreationTest {
 	@Test
 	public void testUpdateCenter() throws IOException {
-		UpdateSite site = new UpdateSite();
-		site.init(new File("./src/test/resources/tmp"), "http://hudson02.nhncorp.com:9080/update");
+		UpdateSite site = UpdateSite.createUpdateSite(new File("./src/test/resources/tmp"), URI.create("http://hudson02.nhncorp.com:9080/update"));
 		File file = File.createTempFile("temp", "json");
 		String updateCenterJSONString = site.toUpdateCenterJSONString();
 		FileUtils.writeStringToFile(file, updateCenterJSONString);

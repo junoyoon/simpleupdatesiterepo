@@ -23,6 +23,9 @@ public class KBCreationTest {
 			}
 
 		});
+
+        listFiles = listFiles == null ? new File[]{} : listFiles;
+
 		for (File eachFile : listFiles) {
 			if (eachFile.isHidden() || eachFile.isFile()) {
 				continue;

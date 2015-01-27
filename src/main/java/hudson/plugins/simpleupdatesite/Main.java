@@ -1,10 +1,6 @@
 package hudson.plugins.simpleupdatesite;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import hudson.plugins.simpleupdatesite.gen.UpdateSite;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -15,6 +11,12 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 
 public class Main {
 	private Options options = new Options();
@@ -49,8 +51,7 @@ public class Main {
 		try {
 			parseArgument(args);
 
-			UpdateSite site = new UpdateSite();
-			site.init(baseFolder, baseUrl);
+			UpdateSite site = UpdateSite.createUpdateSite(baseFolder, URI.create(baseUrl));
 			File file = new File(baseFolder, jsonFileName);
 			FileUtils.writeStringToFile(file, site.toUpdateCenterJSONString());
 			System.out.println(VERSION);
