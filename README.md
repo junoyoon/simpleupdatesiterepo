@@ -26,3 +26,10 @@ You can define system properties to override default behaviour:
 Example: 
 
 `java -jar -Dupdate.center.saveto.dir=/tmp/update/ juseppe-{version}-jar-with-dependencies.jar`
+
+## How to connect Jenkins
+
+Site can be added with help of: 
+    
+- [UpdateSites Manager plugin](https://wiki.jenkins-ci.org/display/JENKINS/UpdateSites+Manager+plugin)
+- [SimpleUpdateSite Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SimpleUpdateSite+Plugin)
