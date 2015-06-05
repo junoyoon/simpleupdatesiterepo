@@ -66,7 +66,7 @@ public class UpdateSiteGen {
                 this.site.getPlugins().add(plugin);
 
             } catch (IOException e) {
-                LOG.error("Fail to get the {} info", hpiFile.getAbsolutePath());
+                LOG.error("Fail to get the {} info", hpiFile.getAbsolutePath(), e);
             }
         }
 
