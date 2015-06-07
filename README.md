@@ -31,5 +31,5 @@ Example:
 
 Site can be added with help of: 
     
-- [UpdateSites Manager plugin](https://wiki.jenkins-ci.org/display/JENKINS/UpdateSites+Manager+plugin)
+- [UpdateSites Manager plugin](https://wiki.jenkins-ci.org/display/JENKINS/UpdateSites+Manager+plugin) (With PR of ignored sign check for now)
 - [SimpleUpdateSite Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SimpleUpdateSite+Plugin)
