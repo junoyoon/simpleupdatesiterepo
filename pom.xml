@@ -14,10 +14,11 @@
 
 
     <dependencies>
+        <!--https://github.com/qatools/properties-->
         <dependency>
-            <groupId>ru.yandex.qatools.properties</groupId>
-            <artifactId>properties-loader</artifactId>
-            <version>1.5</version>
+            <groupId>ru.qatools.commons</groupId>
+            <artifactId>properties</artifactId>
+            <version>2.0.RC3</version>
         </dependency>
 
         <dependency>
@@ -62,6 +63,12 @@
             <version>18.0</version>
         </dependency>
 
+        <!--for signer-->
+        <dependency>
+            <groupId>bouncycastle</groupId>
+            <artifactId>bcprov-jdk15</artifactId>
+            <version>140</version>
+        </dependency>
 
         <!--TEST-->
         <dependency>
@@ -74,7 +81,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
 
@@ -85,13 +92,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
                     <debug>true</debug>
                     <optimize>true</optimize>
                     <encoding>utf-8</encoding>
-                    <showDeprecations>true</showDeprecations>
                 </configuration>
             </plugin>
 
@@ -115,6 +122,8 @@
                                     <mainClass>ru.lanwen.jenkins.juseppe.ServerMain</mainClass>
                                 </manifest>
                             </archive>
+                            <finalName>juseppe</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                         </configuration>
                     </execution>
                 </executions>
