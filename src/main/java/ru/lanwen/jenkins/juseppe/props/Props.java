@@ -1,8 +1,7 @@
 package ru.lanwen.jenkins.juseppe.props;
 
-import ru.yandex.qatools.properties.PropertyLoader;
-import ru.yandex.qatools.properties.annotations.Property;
-import ru.yandex.qatools.properties.annotations.Resource;
+import ru.qatools.properties.Property;
+import ru.qatools.properties.PropertyLoader;
 
 import java.io.File;
 import java.net.URI;
@@ -18,7 +17,7 @@ public class Props {
 
 
     private Props() {
-        PropertyLoader.populate(this);
+        PropertyLoader.newInstance().populate(this);
     }
 
     public static Props props() {
