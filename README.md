@@ -5,13 +5,13 @@ Juseppe - Jenkins Update Site Embedded for Plugin Publishing
 
 ### 1. Checkout & Build 
 
-With maven just run `mvn package`, and you will find jar in `target/juseppe-{version}-jar-with-dependencies.jar`
+With maven just run `mvn package`, and you will find jar in `target/juseppe.jar`
  
 ### 2. Run to serve plugins
 
 To run server with file watching in current directory (not the dir where jar located!)
 
-`java -jar juseppe-{version}-jar-with-dependencies.jar`
+`java -jar juseppe.jar`
 
 ### 3. Configure 
 
@@ -25,7 +25,7 @@ You can define system properties to override default behaviour:
 
 Example: 
 
-`java -jar -Dupdate.center.saveto.dir=/tmp/update/ juseppe-{version}-jar-with-dependencies.jar`
+`java -jar -Dupdate.center.saveto.dir=/tmp/update/ juseppe.jar`
 
 ## How to connect Jenkins
 
@@ -33,3 +33,13 @@ Site can be added with help of:
     
 - [UpdateSites Manager plugin](https://wiki.jenkins-ci.org/display/JENKINS/UpdateSites+Manager+plugin) (With PR of ignored sign check for now)
 - [SimpleUpdateSite Plugin](https://wiki.jenkins-ci.org/display/JENKINS/SimpleUpdateSite+Plugin)
+
+## How to launch with help of docker
+
+Build image  
+
+`docker build -t juseppe:source .`
+
+Next, run it with mounted plugins folder as volume. Remember to set `JUSEPPE_BASE_URI` env var
+
+`docker run --name juseppe -v /your/plugins/dir/:/juseppe/plugins/ -e JUSEPPE_BASE_URI=http://my.company.com -p 80:8080 juseppe:source`
