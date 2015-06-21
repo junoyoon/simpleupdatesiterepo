@@ -10,6 +10,9 @@ import ru.lanwen.jenkins.juseppe.beans.Plugin;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfEmpty;
+import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+
 /**
  * User: lanwen
  * Date: 28.01.15
@@ -24,8 +27,13 @@ public class PluginListSerializer implements JsonSerializer<List<Plugin>> {
     public JsonElement serialize(List<Plugin> src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
 
-        for(Plugin plugin : src) {
-            jsonObject.add(plugin.getName(), context.serialize(plugin));
+        for (Plugin plugin : src) {
+            jsonObject.add(
+                    defaultIfEmpty(
+                            plugin.getName(), 
+                            trimToEmpty(plugin.getTitle()).replace(" ", "-").toLowerCase()
+                    ),
+                    context.serialize(plugin));
         }
 
         return jsonObject;
