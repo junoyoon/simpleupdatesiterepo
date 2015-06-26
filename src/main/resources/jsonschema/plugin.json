@@ -28,10 +28,6 @@
             "type": "string"
         },
 
-        "pluginVersion": {
-            "type": "string"
-        },
-
         "compatibleSinceVersion": {
             "type": "string"
         },

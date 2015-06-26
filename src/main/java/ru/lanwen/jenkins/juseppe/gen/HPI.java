@@ -22,9 +22,11 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.substringBefore;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
+import static org.apache.commons.lang3.Validate.notBlank;
 
 /**
  * HPI Class for extracting HPI information from hpi file.
@@ -39,6 +41,7 @@ public class HPI {
     public static final String PLUGIN_VERSION = "Plugin-Version";
     public static final String PLUGIN_WIKI_URL = "Url";
     public static final String PLUGIN_TITLE = "Long-Name";
+    public static final String PLUGIN_NAME = "Short-Name";
     public static final String PLUGIN_COMPATIBLE_SINCE_VERSION = "Compatible-Since-Version";
     public static final String PLUGIN_REQUIRED_JENKINS_VERSION = "Hudson-Version";
     public static final String PLUGIN_BUILT_BY = "Built-By";
@@ -66,9 +69,15 @@ public class HPI {
         return new Plugin()
                 .withReleaseTimestamp(releaseTimestampDateFormat().format(timestamp))
                 .withBuildDate(buildDateTimeFormat().format(timestamp))
-                .withName(attributes.getValue(Attributes.Name.IMPLEMENTATION_TITLE))
-                .withVersion(attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION))
-                .withPluginVersion(attributes.getValue(PLUGIN_VERSION))
+                .withName(
+                        notBlank(attributes.getValue(PLUGIN_NAME), "Plugin short name can't be empty")
+                )
+                .withVersion(
+                        defaultIfBlank(
+                                attributes.getValue(PLUGIN_VERSION), 
+                                attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION)
+                        )
+                )
                 .withWiki(attributes.getValue(PLUGIN_WIKI_URL))
                 .withTitle(attributes.getValue(PLUGIN_TITLE))
                 .withCompatibleSinceVersion(attributes.getValue(PLUGIN_COMPATIBLE_SINCE_VERSION))
