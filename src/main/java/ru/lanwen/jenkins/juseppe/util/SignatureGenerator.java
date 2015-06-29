@@ -12,6 +12,7 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.X509Certificate;
 
+import static com.google.common.base.Charsets.UTF_8;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
 /**
@@ -21,7 +22,7 @@ import static org.apache.commons.codec.binary.Base64.encodeBase64;
 public class SignatureGenerator {
     public static final String SHA_1_WITH_RSA = "SHA1withRSA";
     public static final String SHA_1 = "SHA1";
-    
+
     private final MessageDigest sha1;
     private final Signature sig;
     private final TeeOutputStream out;
@@ -31,12 +32,12 @@ public class SignatureGenerator {
         // this is for computing a digest
         sha1 = MessageDigest.getInstance(SHA_1);
         DigestOutputStream dos = new DigestOutputStream(new NullOutputStream(), sha1);
-        
+
         // this is for computing a signature
         sig = Signature.getInstance(SHA_1_WITH_RSA);
         sig.initSign(key);
         SignatureOutputStream sos = new SignatureOutputStream(sig);
-        
+
         // this is for verifying that signature validates
         verifier = Signature.getInstance(SHA_1_WITH_RSA);
         verifier.initVerify(signer.getPublicKey());
@@ -62,21 +63,20 @@ public class SignatureGenerator {
     }
 
 
-
     public String digest() {
         byte[] digest = getSha1().digest();
-        return new String(encodeBase64(digest));
+        return new String(encodeBase64(digest), UTF_8);
     }
 
     public String signature() throws GeneralSecurityException {
         byte[] signature = getSig().sign();
         if (!getVerifier().verify(signature)) {
             throw new GeneralSecurityException(
-                    "Signature failed to validate. " +
-                            "Either the certificate and the private key weren't matching, or a bug in the program."
+                    "Signature failed to validate. "
+                            + "Either the certificate and the private key weren't matching, or a bug in the program."
             );
         }
-        return new String(encodeBase64(signature));
+        return new String(encodeBase64(signature), UTF_8);
     }
 
 }

@@ -14,9 +14,9 @@ import java.util.concurrent.Executors;
 public class WatchStarter extends AbstractLifeCycle.AbstractLifeCycleListener {
 
     private ExecutorService executor;
-    private Thread watch;
+    private Runnable watch;
 
-    public WatchStarter(Thread watch) {
+    public WatchStarter(Runnable watch) {
         this.watch = watch;
     }
 

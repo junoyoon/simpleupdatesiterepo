@@ -11,10 +11,9 @@ import java.net.URI;
  * Date: 25.01.15
  * Time: 20:38
  */
-public class Props {
+public final class Props {
 
     public static final int UPDATE_CENTER_VERSION = 1;
-
 
     private Props() {
         PropertyLoader.newInstance().populate(this);
