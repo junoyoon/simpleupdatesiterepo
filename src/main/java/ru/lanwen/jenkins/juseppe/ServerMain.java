@@ -23,6 +23,7 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
  * Time: 2:46
  */
 public class ServerMain {
+    public static final String JENKINS_PLUGIN_WILDCART = "*.hpi";
     public static Props props = Props.props();
 
     public static void main(String[] args) throws Exception {
@@ -41,7 +42,7 @@ public class ServerMain {
         ));
 
         context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + props.getName());
-        context.addServlet(new ServletHolder("plugins", new DefaultServlet()), "*.hpi");
+        context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCART);
 
         Slf4jRequestLog requestLog = new Slf4jRequestLog();
         requestLog.setLogDateFormat(null);

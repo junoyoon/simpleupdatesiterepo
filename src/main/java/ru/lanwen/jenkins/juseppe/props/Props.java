@@ -33,6 +33,12 @@ public class Props {
     @Property("update.center.json.name")
     private String name = "update-center.json";
 
+    @Property("update.center.private.key")
+    private String key = new File("uc.key").getAbsolutePath();
+
+    @Property("update.center.certificate")
+    private String cert = new File("uc.crt").getAbsolutePath();
+
     @Property("jetty.port")
     private int port = 8080;
 
@@ -64,5 +70,13 @@ public class Props {
 
     public int getPort() {
         return port;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getCert() {
+        return cert;
     }
 }
