@@ -22,11 +22,14 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
  * Date: 25.01.15
  * Time: 2:46
  */
-public class ServerMain {
+public final class ServerMain {
     public static final String JENKINS_PLUGIN_WILDCART = "*.hpi";
-    public static Props props = Props.props();
+    private static Props props = Props.props();
 
-    public static void main(String[] args) throws Exception {
+    private ServerMain() {
+    }
+
+    public static void main(final String[] args) throws Exception {
         Server server = new Server(props.getPort());
 
         Path path = Paths.get(props.getPlugins());

@@ -36,6 +36,7 @@ import static org.apache.commons.lang3.Validate.notBlank;
 public class HPI {
     private static final Logger LOG = LoggerFactory.getLogger(HPI.class);
     private static final Pattern DEVELOPERS_PATTERN = Pattern.compile("([^:]*):([^:]*):([^,]*),?");
+
     private static final String OPTIONAL_DEPENDENCY = ";resolution:=optional";
 
     public static final String PLUGIN_VERSION = "Plugin-Version";
@@ -74,7 +75,7 @@ public class HPI {
                 )
                 .withVersion(
                         defaultIfBlank(
-                                attributes.getValue(PLUGIN_VERSION), 
+                                attributes.getValue(PLUGIN_VERSION),
                                 attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION)
                         )
                 )

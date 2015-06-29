@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Charsets.UTF_8;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.security.Security.addProvider;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 import static org.apache.commons.lang3.Validate.isInstanceOf;
@@ -43,24 +44,20 @@ public class Signer {
     private static final Logger LOG = LoggerFactory.getLogger(Signer.class);
 
     /**
-     *  Private key to sign the update center. Must be used in conjunction with certificates
+     * Private key to sign the update center. Must be used in conjunction with certificates
      */
     private File privateKey = new File(props().getKey());
 
     /**
-     * X509 certificate for the private key given by the privateKey option. 
+     * X509 certificate for the private key given by the privateKey option.
      * Specify additional certificate options to pass in intermediate certificates, if any
      */
-    private List<File> certificates = new ArrayList<File>() {{
-        add(new File(props().getCert()));
-    }};
+    private List<File> certificates = newArrayList(new File(props().getCert()));
 
     /**
      * Additional root certificates. Should contain your certificate if it self-signed
      */
-    private List<File> rootCA = new ArrayList<File>() {{
-        add(new File(props().getCert()));
-    }};
+    private List<File> rootCA = newArrayList(new File(props().getCert()));
 
 
     /**
@@ -91,9 +88,7 @@ public class Signer {
         List<X509Certificate> certs = getCertificateChain();
         X509Certificate signer = certs.get(0); // the first one is the signer, and the rest is the chain to a root CA.
 
-        FileReader reader = new FileReader(privateKey);
-
-        Object o = new PEMReader(reader).readObject();
+        Object o = new PEMReader(new FileReader(privateKey)).readObject();
         isInstanceOf(KeyPair.class, o, "File %s is not rsa private key!", privateKey);
         PrivateKey key = ((KeyPair) o).getPrivate();
 
@@ -112,13 +107,13 @@ public class Signer {
         // we generate this in the original names that those Jenkins understands.
         sign.withDigest(digest);
         sign.withCorrectDigest(digest);
-        
+
         sign.withSignature(signature);
         sign.withCorrectSignature(signature);
 
         // and certificate chain
         for (X509Certificate cert : certs) {
-            sign.getCertificates().add(new String(encodeBase64(cert.getEncoded())));
+            sign.getCertificates().add(new String(encodeBase64(cert.getEncoded()), UTF_8));
         }
 
         return sign;

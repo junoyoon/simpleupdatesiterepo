@@ -39,131 +39,126 @@
  */
 package ru.lanwen.jenkins.juseppe.util;
 
-import java.util.Comparator;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.Validate.isInstanceOf;
+
 /**
  * Immutable representation of a dot-separated digits (such as "1.0.1").
- * 
+ *
  * {@link VersionNumber}s are {@link Comparable}.
- * 
+ *
  * <p>
  * We allow a component to be not just a number, but also "ea", "ea1", "ea2".
  * "ea" is treated as "ea0", and eaN &lt; M for any M > 0.
- * 
+ *
  * <p>
- *'*' is also allowed as a component, and '*' > M for any M > 0.
- * 
+ * '*' is also allowed as a component, and '*' > M for any M > 0.
+ *
  * <pre>
  * 2.0.* &gt; 2.0.1 &gt; 2.0.0 &gt; 2.0.ea &gt; 2.0
  * </pre>
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class VersionNumber implements Comparable<VersionNumber> {
-	private final int[] digits;
+    private final int[] digits;
 
-	/**
-	 * Parses a string like "1.0.2" into the version number.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the parsing fails.
-	 */
-	public VersionNumber(String num) {
-		// normalization. "1.0-alpha1" -> "1.0-alpha-1"
-		Matcher m = VersionNumber.ALPHA_NUMBER.matcher(num);
-		if (m.find()) {
-			num = num.substring(0, m.start()) + '-' + num.substring(m.start());
-		}
+    /**
+     * Parses a string like "1.0.2" into the version number.
+     *
+     * @throws IllegalArgumentException if the parsing fails.
+     */
+    public VersionNumber(String num) {
+        // normalization. "1.0-alpha1" -> "1.0-alpha-1"
+        Matcher m = VersionNumber.ALPHA_NUMBER.matcher(num);
+        if (m.find()) {
+            num = num.substring(0, m.start()) + '-' + num.substring(m.start());
+        }
 
-		StringTokenizer tokens = new StringTokenizer(num, ".-");
-		this.digits = new int[tokens.countTokens()];
+        StringTokenizer tokens = new StringTokenizer(num, ".-");
+        this.digits = new int[tokens.countTokens()];
 
-		int i = 0;
-		while (tokens.hasMoreTokens()) {
-			String token = tokens.nextToken().toLowerCase();
-			if (token.equals("*")) {
-				this.digits[i++] = 1000;
-			} else if (token.equals("alpha")) {
-				this.digits[i++] = -2;
-			} else if (token.equals("beta")) {
-				this.digits[i++] = -1;
-			} else if (token.startsWith("ea")) {
-				if (token.length() == 2) {
-					this.digits[i++] = -1000; // just "ea"
-				} else {
-					this.digits[i++] = -1000 + Integer.parseInt(token.substring(2)); // "eaNNN"
-				}
-			} else {
-				this.digits[i++] = Integer.parseInt(token);
-			}
-		}
-	}
+        int i = 0;
+        while (tokens.hasMoreTokens()) {
+            String token = tokens.nextToken().toLowerCase();
+            if (token.equals("*")) {
+                this.digits[i++] = 1000;
+            } else if (token.equals("alpha")) {
+                this.digits[i++] = -2;
+            } else if (token.equals("beta")) {
+                this.digits[i++] = -1;
+            } else if (token.startsWith("ea")) {
+                if (token.length() == 2) {
+                    this.digits[i++] = -1000; // just "ea"
+                } else {
+                    this.digits[i++] = -1000 + Integer.parseInt(token.substring(2)); // "eaNNN"
+                }
+            } else {
+                this.digits[i++] = Integer.parseInt(token);
+            }
+        }
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder buf = new StringBuilder();
-		for (int i = 0; i < this.digits.length; i++) {
-			if (i != 0) {
-				buf.append('.');
-			}
-			buf.append(Integer.toString(this.digits[i]));
-		}
-		return buf.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < this.digits.length; i++) {
+            if (i != 0) {
+                buf.append('.');
+            }
+            buf.append(Integer.toString(this.digits[i]));
+        }
+        return buf.toString();
+    }
 
-	public boolean isOlderThan(VersionNumber rhs) {
-		return compareTo(rhs) < 0;
-	}
+    public boolean isOlderThan(VersionNumber rhs) {
+        return compareTo(rhs) < 0;
+    }
 
-	public boolean isNewerThan(VersionNumber rhs) {
-		return compareTo(rhs) > 0;
-	}
+    public boolean isNewerThan(VersionNumber rhs) {
+        return compareTo(rhs) > 0;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		return compareTo((VersionNumber) o) == 0;
-	}
+    @Override
+    public boolean equals(Object o) {
+        isInstanceOf(VersionNumber.class, o);
+        return compareTo((VersionNumber) o) == 0;
+    }
 
-	@Override
-	public int hashCode() {
-		int x = 0;
-		for (int i : this.digits) {
-			x = x << 1 | i;
-		}
-		return x;
-	}
+    @Override
+    public int hashCode() {
+        int x = 0;
+        for (int i : this.digits) {
+            x = x << 1 | i;
+        }
+        return x;
+    }
 
-	public int compareTo(VersionNumber rhs) {
-		for (int i = 0;; i++) {
-			if (i == this.digits.length && i == rhs.digits.length) {
-				return 0; // equals
-			}
-			if (i == this.digits.length) {
-				return rhs.digits[i] >= 0 ? -1 /* rhs is larger */: 1 /*
-																		 * lhs
-																		 * is
-																		 * larger
-																		 */;
-			}
-			if (i == rhs.digits.length) {
-				return this.digits[i] >= 0 ? 1 : -1;
-			}
+    public int compareTo(VersionNumber rhs) {
+        int i = 0;
+        while (true) {
+            if (i == this.digits.length && i == rhs.digits.length) {
+                return 0; // equals
+            }
+            if (i == this.digits.length) {
+                return rhs.digits[i] >= 0
+                        ? -1 // rhs is larger
+                        : 1; // lhs is larger
+            }
+            if (i == rhs.digits.length) {
+                return this.digits[i] >= 0 ? 1 : -1;
+            }
 
-			int r = this.digits[i] - rhs.digits[i];
-			if (r != 0) {
-				return r;
-			}
-		}
-	}
+            int r = this.digits[i] - rhs.digits[i];
+            if (r != 0) {
+                return r;
+            }
+            i++;
+        }
+    }
 
-	public static final Comparator<VersionNumber> DESCENDING = new Comparator<VersionNumber>() {
-		public int compare(VersionNumber o1, VersionNumber o2) {
-			return o2.compareTo(o1);
-		}
-	};
-
-	private static final Pattern ALPHA_NUMBER = Pattern.compile("(?<=alpha|beta)[0-9]");
+    private static final Pattern ALPHA_NUMBER = Pattern.compile("(?<=alpha|beta)[0-9]");
 }

@@ -21,7 +21,7 @@ public class ToPathWatchEvent implements Function<WatchEvent<?>, WatchEvent<Path
 
     @Override
     @SuppressWarnings("unchecked")
-    public WatchEvent<Path> apply(WatchEvent<?> input) {
+    public WatchEvent<Path> apply(final WatchEvent<?> input) {
         return (WatchEvent<Path>) input;
     }
 }
