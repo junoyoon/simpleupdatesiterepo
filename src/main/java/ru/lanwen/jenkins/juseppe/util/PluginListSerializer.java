@@ -1,4 +1,4 @@
-package ru.lanwen.jenkins.juseppe.gen;
+package ru.lanwen.jenkins.juseppe.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

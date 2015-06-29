@@ -146,7 +146,7 @@
                 </executions>
             </plugin>
 
-            <!--http://joelittlejohn.github.io/jsonschema2pojo/site/0.4.1/generate-mojo.html-->
+            <!--http://joelittlejohn.github.io/jsonschema2pojo/site/0.4.7/generate-mojo.html-->
             <plugin>
                 <groupId>org.jsonschema2pojo</groupId>
                 <artifactId>jsonschema2pojo-maven-plugin</artifactId>
@@ -173,4 +173,19 @@
 
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>repo.jenkins-ci.org</id>
+            <url>http://repo.jenkins-ci.org/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 </project>

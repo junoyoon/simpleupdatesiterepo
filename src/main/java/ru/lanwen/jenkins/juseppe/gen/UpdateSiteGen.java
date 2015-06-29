@@ -1,28 +1,25 @@
-/*
- * Copyright 2010 NHN Corp. All rights Reserved.
- * NHN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
 package ru.lanwen.jenkins.juseppe.gen;
 
-import com.google.gson.GsonBuilder;
 import ru.lanwen.jenkins.juseppe.beans.Plugin;
 import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
 import ru.lanwen.jenkins.juseppe.props.Props;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.lanwen.jenkins.juseppe.util.Marshaller;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.security.GeneralSecurityException;
 import java.util.Collection;
 
 /**
- * @author JunHo Yoon (junoyoon@gmail.com)
+ * @author Merkushev Kirill (github: lanwen)
  */
 public class UpdateSiteGen {
 
-    public static final String[] HPI_EXT = new String[]{"hpi"};
+    public static final String[] PLUGIN_EXT = new String[]{"hpi"};
     private static final Logger LOG = LoggerFactory.getLogger(UpdateSiteGen.class);
 
     public static Props props = Props.props();
@@ -54,7 +51,7 @@ public class UpdateSiteGen {
     public UpdateSiteGen init(File updateCenterBasePath, final URI urlBasePath) {
         LOG.info("UpdateSite will be available at {}/{}", urlBasePath, props.getName());
 
-        Collection<File> collection = FileUtils.listFiles(updateCenterBasePath, HPI_EXT, false);
+        Collection<File> collection = FileUtils.listFiles(updateCenterBasePath, PLUGIN_EXT, false);
         LOG.info("Found {} hpi files in {}... Regenerate json...",
                 collection.size(), updateCenterBasePath.getAbsolutePath());
 
@@ -65,9 +62,15 @@ public class UpdateSiteGen {
 
                 this.site.getPlugins().add(plugin);
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOG.error("Fail to get the {} info", hpiFile.getAbsolutePath(), e);
             }
+        }
+
+        try {
+            site.setSignature(new Signer().sign(site));
+        } catch (GeneralSecurityException | IOException e) {
+            throw new RuntimeException("Can't generate signature", e);
         }
 
         return this;
@@ -80,10 +83,7 @@ public class UpdateSiteGen {
      * @return conveted JSON String
      */
     public String asJsonp() {
-        String json = new GsonBuilder()
-                .registerTypeAdapter(PluginListSerializer.PLUGIN_LIST_TYPE, new PluginListSerializer())
-                .setPrettyPrinting().create()
-                .toJson(site);
+        String json = Marshaller.serializer().toJson(site);
         return String.format("updateCenter.post(%n%s%n);", json);
     }
 
