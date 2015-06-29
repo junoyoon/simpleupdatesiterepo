@@ -1,19 +1,53 @@
-Juseppe - Jenkins Update Site Embedded for Plugin Publishing
-====================
+#Juseppe - Jenkins Update Site Embedded for Plugin Publishing
 
-## Getting started
+## How to launch with help of docker
 
-### 1. Checkout & Build 
+Run it with mounted plugins folder as volume. Remember to set `JUSEPPE_BASE_URI` env var
+
+```
+docker run --name juseppe -v /your/plugins/dir/:/juseppe/plugins/ -e JUSEPPE_BASE_URI=http://my.company.com -p 80:8080 lanwen/juseppe
+```
+
+Then it will be available on `http://dockerhost:80/update-center.json`
+
+### Built-in self-signed certificate
+
+Certificate can be copied from json in format:
+
+```
+-----BEGIN CERTIFICATE-----
+{json value of signature.certificates[0] (without quotes)}
+-----END CERTIFICATE-----
+```
+
+## Build new image  
+
+`docker build -t juseppe:source .`
+
+# Whithout docker
+
+## 1. Checkout & Build 
 
 With maven just run `mvn package`, and you will find jar in `target/juseppe.jar`
+
+## 2. Generate self-signed cert with private key
+
+```
+openssl genrsa -out uc.key 2048 \
+&& openssl req -nodes -x509 -new \
+    -key uc.key \
+    -out uc.crt \
+    -days 1056 \
+    -subj "/C=EN/ST=Update-Center/L=Juseppe/O=Juseppe"
+```
  
-### 2. Run to serve plugins
+## 3. Run to serve plugins
 
 To run server with file watching in current directory (not the dir where jar located!)
 
 `java -jar juseppe.jar`
 
-### 3. Configure 
+## 4. Configure 
 
 You can define system properties to override default behaviour:
 
@@ -34,19 +68,4 @@ Example:
 Site can be added with help of: 
     
 - [UpdateSites Manager plugin](https://wiki.jenkins-ci.org/display/JENKINS/UpdateSites+Manager+plugin)
-
-## How to launch with help of docker
-
-Build image  
-
-`docker build -t juseppe:source .`
-
-Next, run it with mounted plugins folder as volume. Remember to set `JUSEPPE_BASE_URI` env var
-
-`docker run --name juseppe -v /your/plugins/dir/:/juseppe/plugins/ -e JUSEPPE_BASE_URI=http://my.company.com -p 80:8080 juseppe:source`
-
-Then it will be available on `http://dockerhost:80/update-center.json`
-
-Certificate can be copied from json `signature.certificates[0]` with additional 
-`-----BEGIN CERTIFICATE-----` and `-----END CERTIFICATE-----` with line breaks and without quotes.
 
