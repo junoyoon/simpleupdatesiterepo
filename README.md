@@ -20,6 +20,16 @@ Certificate can be copied from json in format:
 -----END CERTIFICATE-----
 ```
 
+**WARN!** Certificate regenerates in every new docker image!
+
+### Specify own certificate
+
+Mount as volumes private key and cert:
+
+```
+docker run --name juseppe -v /your/private/key:/juseppe/cert/uc.key -v /your/cert/file:/juseppe/cert/uc.crt ... lanwen/juseppe
+```
+
 ## Build new image  
 
 `docker build -t juseppe:source .`
