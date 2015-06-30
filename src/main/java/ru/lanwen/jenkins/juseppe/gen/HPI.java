@@ -48,6 +48,7 @@ public class HPI {
     public static final String PLUGIN_BUILT_BY = "Built-By";
     public static final String PLUGIN_DEPENDENCIES = "Plugin-Dependencies";
     public static final String PLUGIN_DEVELOPERS = "Plugin-Developers";
+    public static final String GROUP_ID = "Group-Id";
 
     public static final String MANIFEST_PATH = "META-INF/MANIFEST.MF";
 
@@ -79,6 +80,7 @@ public class HPI {
                                 attributes.getValue(Attributes.Name.IMPLEMENTATION_VERSION)
                         )
                 )
+                .withGroup(attributes.getValue(GROUP_ID))
                 .withWiki(attributes.getValue(PLUGIN_WIKI_URL))
                 .withTitle(attributes.getValue(PLUGIN_TITLE))
                 .withCompatibleSinceVersion(attributes.getValue(PLUGIN_COMPATIBLE_SINCE_VERSION))

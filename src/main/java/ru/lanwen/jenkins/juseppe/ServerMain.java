@@ -45,6 +45,8 @@ public final class ServerMain {
         ));
 
         context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + props.getName());
+        context.addServlet(new ServletHolder("release-history",
+                new DefaultServlet()), "/" + props.getReleaseHistoryJsonName());
         context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCART);
 
         Slf4jRequestLog requestLog = new Slf4jRequestLog();

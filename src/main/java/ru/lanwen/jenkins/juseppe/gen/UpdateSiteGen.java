@@ -14,6 +14,8 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.util.Collection;
 
+import static ru.lanwen.jenkins.juseppe.util.Marshaller.serializerForReleaseHistory;
+
 /**
  * @author Merkushev Kirill (github: lanwen)
  */
@@ -81,23 +83,25 @@ public class UpdateSiteGen {
      *
      * @return conveted JSON String
      */
-    public String asJsonp() {
-        String json = Marshaller.serializer().toJson(site);
+    public String updateCenterJsonp() {
+        String json = Marshaller.serializerForUpdateCenter().toJson(site);
         return String.format("updateCenter.post(%n%s%n);", json);
     }
 
 
-    public void saveTo(File file) {
+    public void saveTo(File file, String content) {
         LOG.info("Save json to {}", file.getAbsolutePath());
         try {
-            FileUtils.writeStringToFile(file, asJsonp());
+            FileUtils.writeStringToFile(file, content);
         } catch (IOException e) {
             throw new RuntimeException(String.format("Can't save json to file %s", file.getAbsolutePath()), e);
         }
     }
 
     public void save() {
-        saveTo(new File(PROPS.getSaveto(), PROPS.getName()));
+        saveTo(new File(PROPS.getSaveto(), PROPS.getName()), updateCenterJsonp());
+        saveTo(new File(PROPS.getSaveto(), PROPS.getReleaseHistoryJsonName()), 
+                serializerForReleaseHistory().toJson(site));
     }
 
 }
