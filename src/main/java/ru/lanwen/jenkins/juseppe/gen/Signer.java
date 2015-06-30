@@ -94,7 +94,7 @@ public class Signer {
 
         SignatureGenerator signatureGenerator = new SignatureGenerator(signer, key);
 
-        String marshalledSite = Marshaller.serializer().toJson(site);
+        String marshalledSite = Marshaller.serializerForUpdateCenter().toJson(site);
 
         try (OutputStreamWriter output = new OutputStreamWriter(signatureGenerator.getOut(), UTF_8)) {
             JSONObject.fromObject(marshalledSite).writeCanonical(output);

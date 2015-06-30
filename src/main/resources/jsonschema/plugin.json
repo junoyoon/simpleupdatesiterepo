@@ -44,6 +44,10 @@
             "type": "string"
         },
 
+        "group": {
+            "type": "string"
+        },
+
         "dependencies": {
             "type": "array",
             "items": {

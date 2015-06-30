@@ -32,6 +32,9 @@ public final class Props {
     @Property("update.center.json.name")
     private String name = "update-center.json";
 
+    @Property("update.center.release.history.json.name")
+    private String releaseHistoryJsonName = "release-history.json";
+
     @Property("update.center.private.key")
     private String key = new File("uc.key").getAbsolutePath();
 
@@ -77,5 +80,9 @@ public final class Props {
 
     public String getCert() {
         return cert;
+    }
+
+    public String getReleaseHistoryJsonName() {
+        return releaseHistoryJsonName;
     }
 }

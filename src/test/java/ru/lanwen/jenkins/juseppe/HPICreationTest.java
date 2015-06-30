@@ -27,10 +27,11 @@ public class HPICreationTest {
     public void shouldSaveJsonWithPluginInfo() throws IOException {
         File file = tmp.newFile("temp.json");
 
-        UpdateSiteGen.createUpdateSite(
+        UpdateSiteGen updateSite = UpdateSiteGen.createUpdateSite(
                 new File(getResource(PLUGINS_DIR_CLASSPATH).getFile()),
                 URI.create(BASE_URL_OF_SITE)
-        ).saveTo(file);
+        );
+        updateSite.saveTo(file, updateSite.updateCenterJsonp());
 
         assertThat(file.exists(), is(true));
         assertThat(file.length(), greaterThan(200l));
@@ -41,7 +42,7 @@ public class HPICreationTest {
         String json = UpdateSiteGen.createUpdateSite(
                 new File(getResource(PLUGINS_DIR_CLASSPATH).getFile()),
                 URI.create(BASE_URL_OF_SITE)
-        ).asJsonp();
+        ).updateCenterJsonp();
 
         assertThat(json, containsString("clang-scanbuild-plugin"));
     }
