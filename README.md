@@ -1,6 +1,7 @@
 #Juseppe - Jenkins Update Site Embedded for Plugin Publishing
 
 ## How to launch with help of docker
+[![](https://badge.imagelayers.io/lanwen/juseppe:latest.svg)](https://imagelayers.io/?images=lanwen/juseppe:latest 'imagelayers.io')
 
 Run it with mounted plugins folder as volume. Remember to set `JUSEPPE_BASE_URI` env var
 
@@ -34,7 +35,7 @@ docker run --name juseppe -v /your/private/key:/juseppe/cert/uc.key -v /your/cer
 
 `docker build -t juseppe:source .`
 
-# Whithout docker
+# Without docker
 
 ## 1. Checkout & Build 
 
