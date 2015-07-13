@@ -27,5 +27,4 @@ public class PrintCertCommand implements Runnable {
             LOG.error("Can't read certificate {}", Props.props().getCert(), e);
         }
     }
-
 }

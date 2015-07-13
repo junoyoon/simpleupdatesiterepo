@@ -28,16 +28,16 @@ public class ServeCommand extends JuseppeCommand {
     public static final String JENKINS_PLUGIN_WILDCART = "*.hpi";
 
     @Arguments(title = "port", description = "Port to bind jetty on")
-    public int port = Props.props().getPort();
+    private int port = Props.props().getPort();
 
     @Override
     public void unsafeRun() throws Exception {
         Server server = new Server(port);
-        Path path = Paths.get(plugins);
+        Path path = Paths.get(getPlugins());
 
         server.addLifeCycleListener(new GenStarter(path));
 
-        if (watch) {
+        if (isWatch()) {
             server.addLifeCycleListener(new WatchStarter(watchFor(path)));
         }
 

@@ -25,7 +25,7 @@ public final class Props {
             @Override
             public Properties provide(ClassLoader classLoader, Class<?> beanClass) {
                 Properties provided = super.provide(classLoader, beanClass);
-                
+
                 // Put env vars if absent
                 Stream.of(JuseppeEnvVars.JuseppeEnvEnum.values())
                         .forEach(env -> provided.computeIfAbsent(env.mapping(), key -> System.getenv(env.name())));
@@ -40,6 +40,10 @@ public final class Props {
             instance = new Props();
         }
         return instance;
+    }
+
+    public void reset() {
+        instance = null;
     }
 
     @Property(JuseppeEnvVars.JUSEPPE_PLUGINS_DIR)

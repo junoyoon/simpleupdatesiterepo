@@ -19,23 +19,23 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
 @Command(name = "generate", description = "just generate json with Juseppe without starting jetty server")
 public class GenerateCommand extends JuseppeCommand {
     private static final Logger LOG = LoggerFactory.getLogger(GenerateCommand.class);
-    
+
     @Override
     public void unsafeRun() throws Exception {
-        Path path = Paths.get(plugins);
+        Path path = Paths.get(getPlugins());
 
         UpdateSiteGen.createUpdateSite(path.toFile()).save();
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        
-        if (watch) {
+
+        if (isWatch()) {
             Runtime.getRuntime().addShutdownHook(stopOnShutdown(executorService));
             executorService.submit(watchFor(path)).get();
         }
     }
 
     private Thread stopOnShutdown(final ExecutorService executorService) {
-        return new Thread(){
+        return new Thread() {
             @Override
             public void run() {
                 executorService.shutdownNow();

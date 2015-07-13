@@ -16,7 +16,7 @@ public class EnvCommand implements Runnable {
     @Override
     public void run() {
         System.out.println(of(JuseppeEnvEnum.values())
-                        .map(env -> format("\t%s (%s) %n\t\t- %s%n\t\tresolved: %s%n", 
+                        .map(env -> format("\t%s (%s) %n\t\t- %s%n\t\tresolved: %s%n",
                                 env.name(), env.mapping(), env.description(), env.resolved()))
                         .collect(joining("\n"))
         );

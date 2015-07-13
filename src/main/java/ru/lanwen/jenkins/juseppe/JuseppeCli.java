@@ -12,17 +12,19 @@ import ru.lanwen.jenkins.juseppe.cli.ServeCommand;
 /**
  * @author lanwen (Merkushev Kirill)
  */
-public class JuseppeCli {
+public final class JuseppeCli {
+    private JuseppeCli() {
+    }
 
     @SuppressWarnings("unchecked")
     public static void main(String[] args) {
         CliBuilder<Runnable> builder = Cli.<Runnable>builder("juseppe")
                 .withDescription("Jenkins Update Site Embedded for Plugin Publishing Easily")
                 .withDefaultCommand(Help.class)
-                .withCommands(Help.class, 
-                        ServeCommand.class, 
-                        GenerateCommand.class, 
-                        EnvCommand.class, 
+                .withCommands(Help.class,
+                        ServeCommand.class,
+                        GenerateCommand.class,
+                        EnvCommand.class,
                         PrintCertCommand.class
                 );
 

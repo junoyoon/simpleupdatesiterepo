@@ -10,25 +10,25 @@ import ru.lanwen.jenkins.juseppe.props.Props;
  * @author lanwen (Merkushev Kirill)
  */
 public abstract class JuseppeCommand implements Runnable {
-    
+
     private static final Logger LOG = LoggerFactory.getLogger(JuseppeCommand.class);
-    
-    protected int exitCode = 0;
-    
+
+    private int exitCode = 0;
+
 
     @Option(name = {"-w", "--watch"},
             description = "watch plugins in directory and update json on change",
             arity = 0,
             type = OptionType.GLOBAL
     )
-    public boolean watch;
+    private boolean watch;
 
     @Option(name = {"-p", "--plugins-directory"},
             title = "plugins directory",
             description = "where the plugins are. Searches only <*.hpi>. Defaults to <current working dir>",
             arity = 1,
             type = OptionType.GLOBAL)
-    public String plugins = Props.props().getPlugins();
+    private String plugins = Props.props().getPlugins();
 
     @Override
     public void run() {
@@ -42,6 +42,26 @@ public abstract class JuseppeCommand implements Runnable {
 
     public int getExitCode() {
         return exitCode;
+    }
+
+    public void setExitCode(int exitCode) {
+        this.exitCode = exitCode;
+    }
+
+    public boolean isWatch() {
+        return watch;
+    }
+
+    public void setWatch(boolean watch) {
+        this.watch = watch;
+    }
+
+    public String getPlugins() {
+        return plugins;
+    }
+
+    public void setPlugins(String plugins) {
+        this.plugins = plugins;
     }
 
     public abstract void unsafeRun() throws Exception;

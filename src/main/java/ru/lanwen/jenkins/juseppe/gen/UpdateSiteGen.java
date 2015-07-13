@@ -1,11 +1,11 @@
 package ru.lanwen.jenkins.juseppe.gen;
 
-import ru.lanwen.jenkins.juseppe.beans.Plugin;
-import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
-import ru.lanwen.jenkins.juseppe.props.Props;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.lanwen.jenkins.juseppe.beans.Plugin;
+import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
+import ru.lanwen.jenkins.juseppe.props.Props;
 import ru.lanwen.jenkins.juseppe.util.Marshaller;
 
 import java.io.File;
@@ -99,7 +99,7 @@ public class UpdateSiteGen {
 
     public void save() {
         saveTo(new File(Props.props().getSaveto(), Props.props().getUcJsonName()), updateCenterJsonp());
-        saveTo(new File(Props.props().getSaveto(), Props.props().getReleaseHistoryJsonName()), 
+        saveTo(new File(Props.props().getSaveto(), Props.props().getReleaseHistoryJsonName()),
                 serializerForReleaseHistory().toJson(site));
     }
 
