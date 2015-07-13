@@ -51,7 +51,7 @@ public class WatchFiles extends Thread {
 
     @Override
     public void run() {
-        LOG.info("Start to watch for: {}", path);
+        LOG.info("Start to watch for changes: {}", path);
         try {
             // get the first event before looping
             WatchKey key = watcher.take();
@@ -68,6 +68,6 @@ public class WatchFiles extends Thread {
         } catch (InterruptedException e) {
             LOG.debug("Cancelled watch service");
         }
-        LOG.trace("Stopping watch thread");
+        LOG.info("Stopping to watch {}", path);
     }
 }

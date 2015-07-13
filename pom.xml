@@ -90,6 +90,13 @@
             <version>2.4-jenkins-1</version>
         </dependency>
 
+        <!--https://github.com/airlift/airline-->
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>airline</artifactId>
+            <version>0.7</version>
+        </dependency>
+
         <!--TEST-->
         <dependency>
             <groupId>org.hamcrest</groupId>
@@ -138,7 +145,7 @@
                             <archive>
                                 <manifest>
                                     <addClasspath>true</addClasspath>
-                                    <mainClass>ru.lanwen.jenkins.juseppe.ServerMain</mainClass>
+                                    <mainClass>ru.lanwen.jenkins.juseppe.JuseppeCli</mainClass>
                                 </manifest>
                             </archive>
                             <finalName>juseppe</finalName>
