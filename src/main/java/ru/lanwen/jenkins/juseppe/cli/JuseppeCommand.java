@@ -12,7 +12,6 @@ import ru.lanwen.jenkins.juseppe.props.Props;
 public abstract class JuseppeCommand implements Runnable {
     
     private static final Logger LOG = LoggerFactory.getLogger(JuseppeCommand.class);
-    private static Props props = Props.props();
     
     protected int exitCode = 0;
     
@@ -29,7 +28,7 @@ public abstract class JuseppeCommand implements Runnable {
             description = "where the plugins are. Searches only <*.hpi>. Defaults to <current working dir>",
             arity = 1,
             type = OptionType.GLOBAL)
-    public String plugins = props.getPlugins();
+    public String plugins = Props.props().getPlugins();
 
     @Override
     public void run() {

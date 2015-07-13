@@ -62,14 +62,14 @@ To run server with file watching in current directory (not the dir where jar loc
 
 You can define system properties to override default behaviour:
 
-- `update.center.plugins.dir` - where the plugins are. Searches only `*.hpi`. Defaults to *current working dir*
-- `update.center.saveto.dir` - where to save generated json file. Defaults to *current working dir*
-- `update.center.json.name` - name of generated json file. Defaults to `update-center.json`
-- `update.center.release.history.json.name` - name of generated release-history json file. Defaults to `release-history.json`
-- `update.center.private.key` - path of private key (must be used in pair with cert). Defaults to *uc.key*
-- `update.center.certificate` - path of certificate (must be used in pair with private key prop). Defaults to *uc.crt* 
-- `update.center.baseurl` - url to prepend for plugins download link in json. Defaults to `http://localhost:8080`
-- `jetty.port` - port for file server. Defaults to `8080`
+- `update.center.plugins.dir` - 
+- `update.center.saveto.dir` - 
+- `update.center.json.name` - 
+- `update.center.release.history.json.name` - 
+- `update.center.private.key` - 
+- `update.center.certificate` - 
+- `update.center.baseurl` - 
+- `jetty.port` - 
 
 Example: 
 

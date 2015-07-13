@@ -23,11 +23,10 @@ public class UpdateSiteGen {
 
     private static final String[] PLUGIN_EXT = new String[]{"hpi"};
     private static final Logger LOG = LoggerFactory.getLogger(UpdateSiteGen.class);
-    private static final Props PROPS = Props.props();
 
     private UpdateSite site = new UpdateSite()
             .withUpdateCenterVersion(Props.UPDATE_CENTER_VERSION)
-            .withId(PROPS.getUcId());
+            .withId(Props.props().getUcId());
 
     private UpdateSiteGen() {
     }
@@ -37,7 +36,7 @@ public class UpdateSiteGen {
     }
 
     public static UpdateSiteGen createUpdateSite(File updateCenterBasePath) {
-        return createUpdateSite(updateCenterBasePath, PROPS.getBaseurl());
+        return createUpdateSite(updateCenterBasePath, Props.props().getBaseurl());
     }
 
 
@@ -50,7 +49,7 @@ public class UpdateSiteGen {
      * @param urlBasePath          base URL for downloading hpi files.
      */
     public UpdateSiteGen init(File updateCenterBasePath, final URI urlBasePath) {
-        LOG.info("UpdateSite will be available at {}/{}", urlBasePath, PROPS.getName());
+        LOG.info("UpdateSite will be available at {}/{}", urlBasePath, Props.props().getUcJsonName());
 
         Collection<File> collection = FileUtils.listFiles(updateCenterBasePath, PLUGIN_EXT, false);
         LOG.info("Found {} hpi files in {}... Regenerate json...",
@@ -99,8 +98,8 @@ public class UpdateSiteGen {
     }
 
     public void save() {
-        saveTo(new File(PROPS.getSaveto(), PROPS.getName()), updateCenterJsonp());
-        saveTo(new File(PROPS.getSaveto(), PROPS.getReleaseHistoryJsonName()), 
+        saveTo(new File(Props.props().getSaveto(), Props.props().getUcJsonName()), updateCenterJsonp());
+        saveTo(new File(Props.props().getSaveto(), Props.props().getReleaseHistoryJsonName()), 
                 serializerForReleaseHistory().toJson(site));
     }
 

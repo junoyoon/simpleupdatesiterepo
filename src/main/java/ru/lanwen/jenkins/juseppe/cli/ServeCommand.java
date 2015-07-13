@@ -26,10 +26,9 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
 public class ServeCommand extends JuseppeCommand {
 
     public static final String JENKINS_PLUGIN_WILDCART = "*.hpi";
-    private static Props props = Props.props();
 
     @Arguments(title = "port", description = "Port to bind jetty on")
-    public int port = props.getPort();
+    public int port = Props.props().getPort();
 
     @Override
     public void unsafeRun() throws Exception {
@@ -45,13 +44,13 @@ public class ServeCommand extends JuseppeCommand {
         ServletContextHandler context = new ServletContextHandler();
 
         context.setBaseResource(new ResourceCollection(
-                Resource.newResource(props.getSaveto()),
-                Resource.newResource(props.getPlugins())
+                Resource.newResource(Props.props().getSaveto()),
+                Resource.newResource(Props.props().getPlugins())
         ));
 
-        context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + props.getName());
+        context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + Props.props().getUcJsonName());
         context.addServlet(new ServletHolder("release-history",
-                new DefaultServlet()), "/" + props.getReleaseHistoryJsonName());
+                new DefaultServlet()), "/" + Props.props().getReleaseHistoryJsonName());
         context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCART);
 
         Slf4jRequestLog requestLog = new Slf4jRequestLog();
