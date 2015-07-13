@@ -1,11 +1,11 @@
 package ru.lanwen.jenkins.juseppe.gen;
 
-import ru.lanwen.jenkins.juseppe.beans.Plugin;
-import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
-import ru.lanwen.jenkins.juseppe.props.Props;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.lanwen.jenkins.juseppe.beans.Plugin;
+import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
+import ru.lanwen.jenkins.juseppe.props.Props;
 import ru.lanwen.jenkins.juseppe.util.Marshaller;
 
 import java.io.File;
@@ -23,11 +23,10 @@ public class UpdateSiteGen {
 
     private static final String[] PLUGIN_EXT = new String[]{"hpi"};
     private static final Logger LOG = LoggerFactory.getLogger(UpdateSiteGen.class);
-    private static final Props PROPS = Props.props();
 
     private UpdateSite site = new UpdateSite()
             .withUpdateCenterVersion(Props.UPDATE_CENTER_VERSION)
-            .withId(PROPS.getUcId());
+            .withId(Props.props().getUcId());
 
     private UpdateSiteGen() {
     }
@@ -37,7 +36,7 @@ public class UpdateSiteGen {
     }
 
     public static UpdateSiteGen createUpdateSite(File updateCenterBasePath) {
-        return createUpdateSite(updateCenterBasePath, PROPS.getBaseurl());
+        return createUpdateSite(updateCenterBasePath, Props.props().getBaseurl());
     }
 
 
@@ -50,7 +49,7 @@ public class UpdateSiteGen {
      * @param urlBasePath          base URL for downloading hpi files.
      */
     public UpdateSiteGen init(File updateCenterBasePath, final URI urlBasePath) {
-        LOG.info("UpdateSite will be available at {}/{}", urlBasePath, PROPS.getName());
+        LOG.info("UpdateSite will be available at {}/{}", urlBasePath, Props.props().getUcJsonName());
 
         Collection<File> collection = FileUtils.listFiles(updateCenterBasePath, PLUGIN_EXT, false);
         LOG.info("Found {} hpi files in {}... Regenerate json...",
@@ -99,8 +98,8 @@ public class UpdateSiteGen {
     }
 
     public void save() {
-        saveTo(new File(PROPS.getSaveto(), PROPS.getName()), updateCenterJsonp());
-        saveTo(new File(PROPS.getSaveto(), PROPS.getReleaseHistoryJsonName()), 
+        saveTo(new File(Props.props().getSaveto(), Props.props().getUcJsonName()), updateCenterJsonp());
+        saveTo(new File(Props.props().getSaveto(), Props.props().getReleaseHistoryJsonName()),
                 serializerForReleaseHistory().toJson(site));
     }
 

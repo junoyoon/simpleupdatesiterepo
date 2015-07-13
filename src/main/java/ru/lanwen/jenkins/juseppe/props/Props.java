@@ -2,9 +2,12 @@ package ru.lanwen.jenkins.juseppe.props;
 
 import ru.qatools.properties.Property;
 import ru.qatools.properties.PropertyLoader;
+import ru.qatools.properties.providers.DefaultPropertyProvider;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Properties;
+import java.util.stream.Stream;
 
 /**
  * User: lanwen
@@ -15,39 +18,59 @@ public final class Props {
 
     public static final int UPDATE_CENTER_VERSION = 1;
 
+    private static Props instance;
+
     private Props() {
-        PropertyLoader.newInstance().populate(this);
+        PropertyLoader.newInstance().withPropertyProvider(new DefaultPropertyProvider() {
+            @Override
+            public Properties provide(ClassLoader classLoader, Class<?> beanClass) {
+                Properties provided = super.provide(classLoader, beanClass);
+
+                // Put env vars if absent
+                Stream.of(JuseppeEnvVars.JuseppeEnvEnum.values())
+                        .forEach(env -> provided.computeIfAbsent(env.mapping(), key -> System.getenv(env.name())));
+
+                return provided;
+            }
+        }).populate(this);
     }
 
     public static Props props() {
-        return new Props();
+        if (instance == null) {
+            instance = new Props();
+        }
+        return instance;
     }
 
-    @Property("update.center.plugins.dir")
+    public void reset() {
+        instance = null;
+    }
+
+    @Property(JuseppeEnvVars.JUSEPPE_PLUGINS_DIR)
     private String plugins = new File("").getAbsolutePath();
 
-    @Property("update.center.saveto.dir")
+    @Property(JuseppeEnvVars.JUSEPPE_SAVE_TO_DIR)
     private String saveto = new File("").getAbsolutePath();
 
-    @Property("update.center.json.name")
-    private String name = "update-center.json";
+    @Property(JuseppeEnvVars.JUSEPPE_UC_JSON_NAME)
+    private String ucJsonName = "update-center.json";
 
-    @Property("update.center.release.history.json.name")
+    @Property(JuseppeEnvVars.JUSEPPE_RELEASE_HISTORY_JSON_NAME)
     private String releaseHistoryJsonName = "release-history.json";
 
-    @Property("update.center.private.key")
+    @Property(JuseppeEnvVars.JUSEPPE_PRIVATE_KEY_PATH)
     private String key = new File("uc.key").getAbsolutePath();
 
-    @Property("update.center.certificate")
+    @Property(JuseppeEnvVars.JUSEPPE_CERT_PATH)
     private String cert = new File("uc.crt").getAbsolutePath();
 
-    @Property("jetty.port")
+    @Property(JuseppeEnvVars.JUSEPPE_BIND_PORT)
     private int port = 8080;
 
-    @Property("update.center.baseurl")
+    @Property(JuseppeEnvVars.JUSEPPE_BASE_URI)
     private URI baseurl = URI.create("http://localhost:8080");
 
-    @Property("update.center.id")
+    @Property(JuseppeEnvVars.JUSEPPE_UPDATE_CENTER_ID)
     private String ucId = "juseppe";
 
     public String getUcId() {
@@ -58,8 +81,8 @@ public final class Props {
         return plugins;
     }
 
-    public String getName() {
-        return name;
+    public String getUcJsonName() {
+        return ucJsonName;
     }
 
     public URI getBaseurl() {
@@ -85,4 +108,5 @@ public final class Props {
     public String getReleaseHistoryJsonName() {
         return releaseHistoryJsonName;
     }
+
 }

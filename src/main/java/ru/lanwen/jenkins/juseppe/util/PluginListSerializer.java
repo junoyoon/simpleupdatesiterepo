@@ -13,12 +13,12 @@ import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.google.common.base.Joiner.on;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Comparator.comparing;
+import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
 
@@ -27,10 +27,13 @@ import static java.util.stream.Collectors.toList;
  * Date: 28.01.15
  * Time: 1:34
  */
-public class PluginListSerializer {
+public final class PluginListSerializer {
 
     public static final Type PLUGIN_LIST_TYPE = new TypeToken<List<Plugin>>() {
     }.getType();
+
+    private PluginListSerializer() {
+    }
 
 
     public static JsonSerializer<List<Plugin>> asUpdateSite() {
@@ -54,7 +57,7 @@ public class PluginListSerializer {
                 List<Day> releases = byDate.entrySet().stream().map(entry -> new Day()
                         .withDate(entry.getKey())
                         .withReleases(fromPlugins(entry.getValue())))
-                        .sorted(comparing(day -> LocalDate.parse(day.getDate(), ofPattern("MMM dd',' uuuu", Locale.ENGLISH))))
+                        .sorted(comparing(day -> LocalDate.parse(day.getDate(), ofPattern("MMM dd',' uuuu", ENGLISH))))
                         .collect(toList());
 
                 JsonObject jsonObject = new JsonObject();
