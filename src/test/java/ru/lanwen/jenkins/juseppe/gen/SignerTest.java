@@ -32,6 +32,7 @@ public class SignerTest {
 
             System.setProperty(JuseppeEnvVars.JUSEPPE_PRIVATE_KEY_PATH, key.getAbsolutePath());
             System.setProperty(JuseppeEnvVars.JUSEPPE_CERT_PATH, cert.getAbsolutePath());
+            Props.props().reset();
         }
     };
 
