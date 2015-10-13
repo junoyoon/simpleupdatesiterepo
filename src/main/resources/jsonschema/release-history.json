@@ -17,6 +17,9 @@
                                 "gav": {
                                     "type": "string"
                                 },
+                                "url": {
+                                    "type": "string"
+                                },
                                 "timestamp": {
                                     "type": "string"
                                 },

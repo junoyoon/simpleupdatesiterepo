@@ -35,15 +35,14 @@ public final class PluginListSerializer {
     private PluginListSerializer() {
     }
 
-
     public static JsonSerializer<List<Plugin>> asUpdateSite() {
         return (src, typeOfSrc, context) -> {
             JsonObject jsonObject = new JsonObject();
-
-            for (Plugin plugin : src) {
-                jsonObject.add(plugin.getName(), context.serialize(plugin));
-            }
-
+            
+            src.stream()
+                    .sorted(comparing(Plugin::getReleaseTimestamp))
+                    .forEach(plugin -> jsonObject.add(plugin.getName(), context.serialize(plugin)));
+            
             return jsonObject;
         };
     }
@@ -69,6 +68,7 @@ public final class PluginListSerializer {
             private List<Release> fromPlugins(List<Plugin> plugins) {
                 return plugins.stream().map(plugin -> new Release()
                                 .withGav(on(":").join(plugin.getGroup(), plugin.getName(), plugin.getVersion()))
+                                .withUrl(plugin.getUrl())
                                 .withTimestamp(plugin.getReleaseTimestamp())
                                 .withTitle(plugin.getTitle())
                                 .withVersion(plugin.getVersion())
