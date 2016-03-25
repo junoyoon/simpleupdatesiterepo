@@ -14,6 +14,13 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
+    <scm>
+        <url>https://github.com/yandex-qatools/juseppe</url>
+        <connection>scm:git:git://github.com/yandex-qatools/juseppe.git</connection>
+        <developerConnection>scm:git:git@github.com:yandex-qatools/juseppe.git
+        </developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencies>
         <!--https://github.com/qatools/properties-->
@@ -179,6 +186,16 @@
             </plugin>
             <!--//-->
 
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <preparationGoals>clean</preparationGoals>
+                    <goals>install</goals>
+                </configuration>
+            </plugin>
+            
         </plugins>
     </build>
     

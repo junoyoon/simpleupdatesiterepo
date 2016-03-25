@@ -8,11 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
-import static com.google.common.collect.FluentIterable.from;
+import static java.lang.String.format;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static ru.lanwen.jenkins.juseppe.files.ToPathWatchEvent.toPathWatchEvent;
 import static ru.lanwen.jenkins.juseppe.files.WatchEventExtension.hasExt;
 import static ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen.createUpdateSite;
 
@@ -33,6 +32,8 @@ public class WatchFiles extends Thread {
     }
 
     public WatchFiles configureFor(Path path) throws IOException {
+        setName(format("file-watcher-%s", path.getFileName()));
+
         this.path = path;
 
         watcher = this.path.getFileSystem().newWatchService();
@@ -48,7 +49,6 @@ public class WatchFiles extends Thread {
         return new WatchFiles().configureFor(path);
     }
 
-
     @Override
     public void run() {
         LOG.info("Start to watch for changes: {}", path);
@@ -57,7 +57,7 @@ public class WatchFiles extends Thread {
             WatchKey key = watcher.take();
             while (key != null) {
 
-                if (from(key.pollEvents()).transform(toPathWatchEvent()).anyMatch(hasExt(".hpi"))) {
+                if (key.pollEvents().stream().anyMatch(hasExt(".hpi"))) {
                     LOG.trace("HPI list modify found!");
                     createUpdateSite(path.toFile()).save();
                 }
