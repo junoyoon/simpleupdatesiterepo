@@ -1,8 +1,10 @@
 package ru.lanwen.jenkins.juseppe.gen;
 
 import net.sf.json.JSONObject;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMReader;
+import org.bouncycastle.openssl.PEMKeyPair;
+import org.bouncycastle.openssl.PEMParser;
 import org.jvnet.hudson.crypto.CertificateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +19,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.security.GeneralSecurityException;
-import java.security.KeyPair;
-import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.TrustAnchor;
@@ -88,9 +88,9 @@ public class Signer {
         List<X509Certificate> certs = getCertificateChain();
         X509Certificate signer = certs.get(0); // the first one is the signer, and the rest is the chain to a root CA.
 
-        Object o = new PEMReader(new FileReader(privateKey)).readObject();
-        isInstanceOf(KeyPair.class, o, "File %s is not rsa private key!", privateKey);
-        PrivateKey key = ((KeyPair) o).getPrivate();
+        Object o = new PEMParser(new FileReader(privateKey)).readObject();
+        isInstanceOf(PEMKeyPair.class, o, "File %s is not rsa private key!", privateKey);
+        PrivateKeyInfo key = ((PEMKeyPair) o).getPrivateKeyInfo();
 
         SignatureGenerator signatureGenerator = new SignatureGenerator(signer, key);
 

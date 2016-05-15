@@ -2,13 +2,14 @@ package ru.lanwen.jenkins.juseppe.util;
 
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.io.output.TeeOutputStream;
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
+import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.jvnet.hudson.crypto.SignatureOutputStream;
 
 import java.io.IOException;
 import java.security.DigestOutputStream;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.X509Certificate;
 
@@ -28,14 +29,15 @@ public class SignatureGenerator {
     private final TeeOutputStream out;
     private final Signature verifier;
 
-    public SignatureGenerator(X509Certificate signer, PrivateKey key) throws GeneralSecurityException, IOException {
+    public SignatureGenerator(X509Certificate signer, PrivateKeyInfo key) throws GeneralSecurityException, IOException {
         // this is for computing a digest
         sha1 = MessageDigest.getInstance(SHA_1);
         DigestOutputStream dos = new DigestOutputStream(new NullOutputStream(), sha1);
 
         // this is for computing a signature
         sig = Signature.getInstance(SHA_1_WITH_RSA);
-        sig.initSign(key);
+        JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+        sig.initSign(converter.getPrivateKey(key));
         SignatureOutputStream sos = new SignatureOutputStream(sig);
 
         // this is for verifying that signature validates

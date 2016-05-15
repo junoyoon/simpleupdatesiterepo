@@ -148,4 +148,40 @@ public final class Props {
         this.ucId = ucId;
         return this;
     }
+
+    public void setPluginsDir(String pluginsDir) {
+        this.pluginsDir = pluginsDir;
+    }
+
+    public void setSaveto(String saveto) {
+        this.saveto = saveto;
+    }
+
+    public void setUcJsonName(String ucJsonName) {
+        this.ucJsonName = ucJsonName;
+    }
+
+    public void setReleaseHistoryJsonName(String releaseHistoryJsonName) {
+        this.releaseHistoryJsonName = releaseHistoryJsonName;
+    }
+
+    public void setKeyPath(String keyPath) {
+        this.keyPath = keyPath;
+    }
+
+    public void setCertPath(String certPath) {
+        this.certPath = certPath;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public void setBaseurl(URI baseurl) {
+        this.baseurl = baseurl;
+    }
+
+    public void setUcId(String ucId) {
+        this.ucId = ucId;
+    }
 }
