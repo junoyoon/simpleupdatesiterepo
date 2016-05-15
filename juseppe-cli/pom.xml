@@ -13,6 +13,7 @@
 
 
     <dependencies>
+        
         <dependency>
             <groupId>ru.lanwen.jenkins</groupId>
             <artifactId>juseppe-core</artifactId>
@@ -32,6 +33,13 @@
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
         </dependency>
+
+        <!--https://github.com/airlift/airline-->
+        <dependency>
+            <groupId>io.airlift</groupId>
+            <artifactId>airline</artifactId>
+        </dependency>
+        
     </dependencies>
     
     <build>

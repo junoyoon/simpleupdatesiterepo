@@ -60,12 +60,6 @@
             <artifactId>json-lib</artifactId>
         </dependency>
 
-        <!--https://github.com/airlift/airline-->
-        <dependency>
-            <groupId>io.airlift</groupId>
-            <artifactId>airline</artifactId>
-        </dependency>
-
         <!--TEST-->
         <dependency>
             <groupId>org.hamcrest</groupId>
