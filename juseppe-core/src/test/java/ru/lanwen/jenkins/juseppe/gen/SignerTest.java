@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
  *         Date: 22.06.15
  */
 public class SignerTest {
-    
+
     @Before
     public void setUp() throws Exception {
         System.clearProperty(JuseppeEnvVars.JuseppeEnvEnum.JUSEPPE_PRIVATE_KEY_PATH.mapping());

@@ -34,11 +34,6 @@
             <artifactId>gson</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
-
         <!--for signer-->
         <dependency>
             <groupId>bouncycastle</groupId>
@@ -78,11 +73,17 @@
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-    
+
     <build>
         <plugins>
-            
+
             <!--http://joelittlejohn.github.io/jsonschema2pojo/site/0.4.7/generate-mojo.html-->
             <plugin>
                 <groupId>org.jsonschema2pojo</groupId>
@@ -110,5 +111,5 @@
 
         </plugins>
     </build>
-    
+
 </project>

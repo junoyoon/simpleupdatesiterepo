@@ -12,7 +12,7 @@ import java.security.PrivateKey;
 import java.security.Signature;
 import java.security.cert.X509Certificate;
 
-import static com.google.common.base.Charsets.UTF_8;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 
 /**

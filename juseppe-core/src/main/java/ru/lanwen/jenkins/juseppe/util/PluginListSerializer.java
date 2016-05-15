@@ -15,12 +15,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Joiner.on;
 import static java.time.format.DateTimeFormatter.ofPattern;
 import static java.util.Comparator.comparing;
 import static java.util.Locale.ENGLISH;
 import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 /**
  * User: lanwen
@@ -38,11 +39,11 @@ public final class PluginListSerializer {
     public static JsonSerializer<List<Plugin>> asUpdateSite() {
         return (src, typeOfSrc, context) -> {
             JsonObject jsonObject = new JsonObject();
-            
+
             src.stream()
                     .sorted(comparing(Plugin::getReleaseTimestamp))
                     .forEach(plugin -> jsonObject.add(plugin.getName(), context.serialize(plugin)));
-            
+
             return jsonObject;
         };
     }
@@ -67,12 +68,18 @@ public final class PluginListSerializer {
 
             private List<Release> fromPlugins(List<Plugin> plugins) {
                 return plugins.stream().map(plugin -> new Release()
-                                .withGav(on(":").join(plugin.getGroup(), plugin.getName(), plugin.getVersion()))
-                                .withUrl(plugin.getUrl())
-                                .withTimestamp(plugin.getReleaseTimestamp())
-                                .withTitle(plugin.getTitle())
-                                .withVersion(plugin.getVersion())
-                                .withWiki(plugin.getWiki())
+                        .withGav(
+                                of(
+                                        plugin.getGroup(),
+                                        plugin.getName(),
+                                        plugin.getVersion()
+                                ).collect(joining(":"))
+                        )
+                        .withUrl(plugin.getUrl())
+                        .withTimestamp(plugin.getReleaseTimestamp())
+                        .withTitle(plugin.getTitle())
+                        .withVersion(plugin.getVersion())
+                        .withWiki(plugin.getWiki())
                 ).collect(toList());
             }
         };

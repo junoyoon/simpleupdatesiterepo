@@ -24,13 +24,13 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.TrustAnchor;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static com.google.common.base.Charsets.UTF_8;
-import static com.google.common.collect.Lists.newArrayList;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.security.Security.addProvider;
 import static org.apache.commons.codec.binary.Base64.encodeBase64;
 import static org.apache.commons.lang3.Validate.isInstanceOf;
@@ -52,12 +52,12 @@ public class Signer {
      * X509 certificate for the private key given by the privateKey option.
      * Specify additional certificate options to pass in intermediate certificates, if any
      */
-    private List<File> certificates = newArrayList(new File(populated().getCertPath()));
+    private List<File> certificates = new ArrayList<>(Collections.singleton(new File(populated().getCertPath())));
 
     /**
      * Additional root certificates. Should contain your certificate if it self-signed
      */
-    private List<File> rootCA = newArrayList(new File(populated().getCertPath()));
+    private List<File> rootCA = new ArrayList<>(Collections.singleton(new File(populated().getCertPath())));
 
 
     /**
