@@ -24,7 +24,7 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
 @Command(name = "serve", description = "starts the jetty server with Juseppe to serve generated json and plugins")
 public class ServeCommand extends JuseppeCommand {
 
-    private static final String JENKINS_PLUGIN_WILDCART = "*.hpi";
+    private static final String JENKINS_PLUGIN_WILDCARD = "*.hpi";
     private static final Logger LOG = LoggerFactory.getLogger(ServeCommand.class);
 
     @Arguments(title = "port", description = "Port to bind jetty on")
@@ -49,7 +49,7 @@ public class ServeCommand extends JuseppeCommand {
         context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + props.getUcJsonName());
         context.addServlet(new ServletHolder("release-history",
                 new DefaultServlet()), "/" + props.getReleaseHistoryJsonName());
-        context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCART);
+        context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCARD);
 
         Slf4jRequestLog requestLog = new Slf4jRequestLog();
         requestLog.setLogDateFormat(null);
