@@ -33,5 +33,5 @@ RUN openssl genrsa -out ${JUSEPPE_PRIVATE_KEY_PATH} 2048 \
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "target/juseppe.jar"]
+ENTRYPOINT ["java", "-jar", "juseppe-cli/target/juseppe.jar"]
 CMD ["-w", "serve"]
