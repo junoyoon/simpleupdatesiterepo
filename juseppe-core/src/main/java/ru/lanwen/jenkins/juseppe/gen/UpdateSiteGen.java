@@ -1,26 +1,27 @@
 package ru.lanwen.jenkins.juseppe.gen;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
-import ru.lanwen.jenkins.juseppe.gen.source.FilePluginSource;
+import ru.lanwen.jenkins.juseppe.gen.source.PathPluginSource;
+import ru.lanwen.jenkins.juseppe.gen.view.JsonpUpdateSite;
+import ru.lanwen.jenkins.juseppe.gen.view.ReleaseHistoryUpdateSite;
 import ru.lanwen.jenkins.juseppe.props.Props;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Merkushev Kirill (github: lanwen)
  */
 public class UpdateSiteGen {
-
-    private static final Logger LOG = LoggerFactory.getLogger(UpdateSiteGen.class);
 
     private Props props;
     private UpdateSite site = new UpdateSite();
@@ -48,7 +49,7 @@ public class UpdateSiteGen {
                 site -> site.withUpdateCenterVersion(Props.UPDATE_CENTER_VERSION)
                         .withId(props.getUcId())
         ).register(
-                site -> Collections.singleton(new FilePluginSource(props))
+                site -> Collections.singleton(new PathPluginSource(Paths.get(props.getPluginsDir())))
                         .forEach(source -> site.getPlugins().addAll(source.plugins()))
         ).register(
                 site -> site.getPlugins()
@@ -63,8 +64,16 @@ public class UpdateSiteGen {
                 });
     }
 
-    public FilledUpdateSite fill() {
+    public SavableSitesCollection fill() {
         siteConsumers.forEach(consumer -> consumer.accept(site));
-        return new FilledUpdateSite(site, props);
+
+        List<SavableSite> files = Stream.of(
+                new JsonpUpdateSite(site, props.getUcJsonName()),
+                new ReleaseHistoryUpdateSite(site, props.getReleaseHistoryJsonName())
+        )
+                .map(view -> new SavableSite(Paths.get(props.getSaveto()), view))
+                .collect(toList());
+
+        return new SavableSitesCollection(files);
     }
 }

@@ -6,8 +6,6 @@ import org.slf4j.LoggerFactory;
 import ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen;
 import ru.lanwen.jenkins.juseppe.props.Props;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +21,7 @@ public class GenerateCommand extends JuseppeCommand {
 
     @Override
     public void unsafeRun(Props props) throws Exception {
-        UpdateSiteGen.updateSite(props).withDefaults().fill().save();
+        UpdateSiteGen.updateSite(props).withDefaults().fill().saveAll();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         if (isWatch()) {

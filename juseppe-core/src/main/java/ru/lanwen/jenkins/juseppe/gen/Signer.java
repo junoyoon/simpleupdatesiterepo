@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.lanwen.jenkins.juseppe.beans.Signature;
 import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
-import ru.lanwen.jenkins.juseppe.util.Marshaller;
+import ru.lanwen.jenkins.juseppe.gen.json.UpdateSiteSerializer;
 import ru.lanwen.jenkins.juseppe.util.SignatureGenerator;
 
 import java.io.File;
@@ -94,7 +94,7 @@ public class Signer {
 
         SignatureGenerator signatureGenerator = new SignatureGenerator(signer, key);
 
-        String marshalledSite = Marshaller.serializerForUpdateCenter().toJson(site);
+        String marshalledSite = UpdateSiteSerializer.serializer().toJson(site);
 
         try (OutputStreamWriter output = new OutputStreamWriter(signatureGenerator.getOut(), UTF_8)) {
             JSONObject.fromObject(marshalledSite).writeCanonical(output);
