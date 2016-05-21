@@ -5,20 +5,23 @@ import org.junit.Test;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.RuleChain;
 import org.junit.rules.TemporaryFolder;
-import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
+import ru.lanwen.jenkins.juseppe.gen.SavableSite;
 import ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen;
-import ru.lanwen.jenkins.juseppe.gen.view.JsonpUpdateSite;
+import ru.lanwen.jenkins.juseppe.gen.view.UpdateSiteView;
 import ru.lanwen.jenkins.juseppe.props.JuseppeEnvVars;
 import ru.lanwen.jenkins.juseppe.props.Props;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 
 import static com.google.common.io.Resources.getResource;
 import static java.lang.System.clearProperty;
 import static java.lang.System.setProperty;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.everyItem;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen.updateSite;
@@ -54,7 +57,7 @@ public class HPICreationTest {
                         .withBaseurl(URI.create(BASE_URL_OF_SITE))
                         .withSaveto(file.getParent())
                         .withUcJsonName(file.getName())
-        ).withDefaults().fill().save();
+        ).withDefaults().toSave().saveAll();
 
         assertThat(file, exists());
         assertThat(file.length(), greaterThan(200l));
@@ -65,7 +68,7 @@ public class HPICreationTest {
         File file = new File(folderToSave, Props.populated().getReleaseHistoryJsonName());
 
         UpdateSiteGen.updateSite(Props.populated()
-                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().fill().save();
+                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().toSave().saveAll();
 
         assertThat(file, exists());
         assertThat(file.length(), greaterThan(200l));
@@ -73,11 +76,14 @@ public class HPICreationTest {
 
     @Test
     public void shouldContainPlugin() throws IOException {
-        UpdateSite site = UpdateSiteGen.updateSite(Props.populated()
-                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().fill().getSite();
-        
-        assertThat(new JsonpUpdateSite(site, "uc.json").content(), containsString("clang-scanbuild-plugin"));
-        assertThat(site.getPlugins().stream().findFirst().get().getUrl(), 
-                containsString(Props.populated().getBaseurl() + "/clang-scanbuild-plugin.hpi"));
+        List<String> contents = UpdateSiteGen.updateSite(Props.populated()
+                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().toSave()
+                .savables().stream()
+                .map(SavableSite::getView)
+                .map(UpdateSiteView::content)
+                .collect(toList());
+
+        assertThat(contents, everyItem(containsString("clang-scanbuild-plugin")));
+        assertThat(contents, everyItem(containsString(Props.populated().getBaseurl() + "/clang-scanbuild-plugin.hpi")));
     }
 }

@@ -138,9 +138,9 @@ public class HPI {
         int totalMatched = 0;
         while (matcher.find()) {
             result.add(new Developer()
-                            .withName(trimToEmpty(matcher.group(1)))
-                            .withDeveloperId(trimToEmpty(matcher.group(2)))
-                            .withEmail(trimToEmpty(matcher.group(3)))
+                    .withName(trimToEmpty(matcher.group(1)))
+                    .withDeveloperId(trimToEmpty(matcher.group(2)))
+                    .withEmail(trimToEmpty(matcher.group(3)))
             );
             totalMatched += matcher.end() - matcher.start();
         }

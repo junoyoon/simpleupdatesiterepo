@@ -1,16 +1,15 @@
 package ru.lanwen.jenkins.juseppe.gen.view;
 
 import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
-
-import static ru.lanwen.jenkins.juseppe.util.Marshaller.serializerForReleaseHistory;
+import ru.lanwen.jenkins.juseppe.gen.json.ReleaseHistorySerializer;
 
 /**
  * @author lanwen (Merkushev Kirill)
  */
 public class ReleaseHistoryUpdateSite implements UpdateSiteView {
 
-    private UpdateSite site;
-    private String name;
+    private final UpdateSite site;
+    private final String name;
 
     public ReleaseHistoryUpdateSite(UpdateSite site, String name) {
         this.site = site;
@@ -19,7 +18,7 @@ public class ReleaseHistoryUpdateSite implements UpdateSiteView {
 
     @Override
     public String content() {
-        return serializerForReleaseHistory().toJson(site);
+        return ReleaseHistorySerializer.serializer().toJson(site);
     }
 
     @Override

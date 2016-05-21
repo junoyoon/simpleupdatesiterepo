@@ -20,6 +20,6 @@ public class GenStarter extends AbstractLifeCycle.AbstractLifeCycleListener {
 
     @Override
     public void lifeCycleStarted(LifeCycle event) {
-        UpdateSiteGen.updateSite(props).withDefaults().fill().save();
+        UpdateSiteGen.updateSite(props).withDefaults().toSave().saveAll();
     }
 }
