@@ -57,7 +57,7 @@ public class HPICreationTest {
                         .withBaseurl(URI.create(BASE_URL_OF_SITE))
                         .withSaveto(file.getParent())
                         .withUcJsonName(file.getName())
-        ).withDefaults().fill().saveAll();
+        ).withDefaults().toSave().saveAll();
 
         assertThat(file, exists());
         assertThat(file.length(), greaterThan(200l));
@@ -68,7 +68,7 @@ public class HPICreationTest {
         File file = new File(folderToSave, Props.populated().getReleaseHistoryJsonName());
 
         UpdateSiteGen.updateSite(Props.populated()
-                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().fill().saveAll();
+                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().toSave().saveAll();
 
         assertThat(file, exists());
         assertThat(file.length(), greaterThan(200l));
@@ -77,7 +77,7 @@ public class HPICreationTest {
     @Test
     public void shouldContainPlugin() throws IOException {
         List<String> contents = UpdateSiteGen.updateSite(Props.populated()
-                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().fill()
+                .withPluginsDir(getResource(PLUGINS_DIR_CLASSPATH).getFile())).withDefaults().toSave()
                 .savables().stream()
                 .map(SavableSite::getView)
                 .map(UpdateSiteView::content)

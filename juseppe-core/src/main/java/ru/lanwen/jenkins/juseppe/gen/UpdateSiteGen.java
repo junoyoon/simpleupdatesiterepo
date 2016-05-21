@@ -63,13 +63,18 @@ public class UpdateSiteGen {
                     }
                 });
     }
-
-    public SavableSitesCollection fill() {
+    
+    public UpdateSite filled() {
         siteConsumers.forEach(consumer -> consumer.accept(site));
+        return site;
+    }
 
+    public SavableSitesCollection toSave() {
+        UpdateSite filled = filled();
+        
         List<SavableSite> files = Stream.of(
-                new JsonpUpdateSite(site, props.getUcJsonName()),
-                new ReleaseHistoryUpdateSite(site, props.getReleaseHistoryJsonName())
+                new JsonpUpdateSite(filled, props.getUcJsonName()),
+                new ReleaseHistoryUpdateSite(filled, props.getReleaseHistoryJsonName())
         )
                 .map(view -> new SavableSite(Paths.get(props.getSaveto()), view))
                 .collect(toList());

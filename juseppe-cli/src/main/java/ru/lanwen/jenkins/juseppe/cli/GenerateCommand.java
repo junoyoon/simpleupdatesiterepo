@@ -21,7 +21,7 @@ public class GenerateCommand extends JuseppeCommand {
 
     @Override
     public void unsafeRun(Props props) throws Exception {
-        UpdateSiteGen.updateSite(props).withDefaults().fill().saveAll();
+        UpdateSiteGen.updateSite(props).withDefaults().toSave().saveAll();
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         if (isWatch()) {
