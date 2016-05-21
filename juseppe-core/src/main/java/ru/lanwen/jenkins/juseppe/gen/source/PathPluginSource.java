@@ -30,7 +30,7 @@ public class PathPluginSource implements PluginSource {
 
     @Override
     public List<Plugin> plugins() {
-        try (DirectoryStream<Path> paths = Files.newDirectoryStream(pluginsDir, "*.hpi")) {
+        try (DirectoryStream<Path> paths = Files.newDirectoryStream(pluginsDir, "*.{hpi,jpi}")) {
             return StreamSupport.stream(paths.spliterator(), false).map(path -> {
                 try {
                     LOG.trace("Process file {}", path);
