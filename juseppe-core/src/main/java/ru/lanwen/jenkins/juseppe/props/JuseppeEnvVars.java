@@ -45,7 +45,7 @@ public final class JuseppeEnvVars {
 
         JUSEPPE_PLUGINS_DIR(
                 JuseppeEnvVars.JUSEPPE_PLUGINS_DIR,
-                "where the plugins are. Searches only `*.hpi`. Defaults to *current working dir*"
+                "where the plugins are. Searches only `*.hpi` or `*.jpi`. Defaults to *current working dir*"
         ) {
             @Override
             public String resolved() {

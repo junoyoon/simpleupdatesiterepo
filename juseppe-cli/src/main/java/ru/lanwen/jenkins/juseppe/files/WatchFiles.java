@@ -61,8 +61,8 @@ public class WatchFiles extends Thread {
             WatchKey key = watcher.take();
             while (key != null) {
 
-                if (key.pollEvents().stream().anyMatch(hasExt(".hpi"))) {
-                    LOG.trace("HPI list modify found!");
+                if (key.pollEvents().stream().anyMatch(hasExt(".hpi").or(hasExt(".jpi")))) {
+                    LOG.trace("HPI (JPI) list modify found!");
                     UpdateSiteGen.updateSite(props).withDefaults().toSave().saveAll();
                 }
 
