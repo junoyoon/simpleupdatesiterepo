@@ -97,7 +97,7 @@ Complete list of vars can be found after `juseppe env` command.
   path of private key (must be used in pair with cert). Defaults to *uc.key*
 
 - `JUSEPPE_PLUGINS_DIR` (`juseppe.plugins.dir`)   
-  where the plugins are. Searches only `*.hpi`. Defaults to *current working dir*
+  where the plugins are. Searches only `*.hpi` and `*.jpi`. Defaults to *current working dir*
 
 - `JUSEPPE_SAVE_TO_DIR` (`juseppe.saveto.dir`)   
   where to save generated json file. Defaults to *current working dir*
