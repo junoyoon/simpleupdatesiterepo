@@ -1,5 +1,7 @@
 package ru.lanwen.jenkins.juseppe.gen;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.lanwen.jenkins.juseppe.beans.UpdateSite;
 import ru.lanwen.jenkins.juseppe.gen.source.PathPluginSource;
 import ru.lanwen.jenkins.juseppe.gen.view.JsonpUpdateSite;
@@ -22,6 +24,7 @@ import static java.util.stream.Collectors.toList;
  * @author Merkushev Kirill (github: lanwen)
  */
 public class UpdateSiteGen {
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateSiteGen.class);
 
     private Props props;
     private UpdateSite site = new UpdateSite();
@@ -63,7 +66,7 @@ public class UpdateSiteGen {
                     }
                 });
     }
-    
+
     public UpdateSite filled() {
         siteConsumers.forEach(consumer -> consumer.accept(site));
         return site;
@@ -71,7 +74,8 @@ public class UpdateSiteGen {
 
     public SavableSitesCollection toSave() {
         UpdateSite filled = filled();
-        
+        LOG.info("Ready to save {} plugin(s)...", filled.getPlugins().size());
+
         List<SavableSite> files = Stream.of(
                 new JsonpUpdateSite(filled, props.getUcJsonName()),
                 new ReleaseHistoryUpdateSite(filled, props.getReleaseHistoryJsonName())
