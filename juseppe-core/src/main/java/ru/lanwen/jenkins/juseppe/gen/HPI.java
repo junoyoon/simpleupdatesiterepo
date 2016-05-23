@@ -57,7 +57,7 @@ public class HPI {
         JarFile jarFile = new JarFile(file);
         long timestamp = jarFile.getEntry(MANIFEST_PATH).getTime();
 
-        Plugin hpi = new HPI().from(jarFile.getManifest().getMainAttributes(), timestamp);
+        Plugin hpi = HPI.from(jarFile.getManifest().getMainAttributes(), timestamp);
 
         String wiki = getWiki(file);
         if (StringUtils.isNotBlank(wiki)) {
@@ -67,7 +67,7 @@ public class HPI {
         return hpi.withExcerpt(getExcerpt(file));
     }
 
-    private Plugin from(Attributes attributes, long timestamp) throws IOException {
+    private static Plugin from(Attributes attributes, long timestamp) throws IOException {
         return new Plugin()
                 .withReleaseTimestamp(releaseTimestampDateFormat().format(timestamp))
                 .withBuildDate(buildDateTimeFormat().format(timestamp))
@@ -90,7 +90,7 @@ public class HPI {
                 .withDevelopers(getDevelopers(attributes));
     }
 
-    private SimpleDateFormat releaseTimestampDateFormat() {
+    private static SimpleDateFormat releaseTimestampDateFormat() {
         SimpleDateFormat releaseFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'.00Z'", Locale.US);
         releaseFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return releaseFormat;
@@ -100,7 +100,7 @@ public class HPI {
         return new SimpleDateFormat("MMM dd, yyyy", Locale.US);
     }
 
-    protected List<Dependency> getDependencies(Attributes attributes) throws IOException {
+    protected static List<Dependency> getDependencies(Attributes attributes) throws IOException {
         String deps = attributes.getValue(PLUGIN_DEPENDENCIES);
         if (deps == null) {
             return Collections.emptyList();
@@ -127,7 +127,7 @@ public class HPI {
                 .withOptional(optional);
     }
 
-    protected List<Developer> getDevelopers(Attributes attributes) throws IOException {
+    protected static List<Developer> getDevelopers(Attributes attributes) throws IOException {
         String devs = attributes.getValue(PLUGIN_DEVELOPERS);
         if (isBlank(devs)) {
             return Collections.emptyList();
