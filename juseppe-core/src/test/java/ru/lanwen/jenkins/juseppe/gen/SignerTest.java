@@ -48,11 +48,7 @@ public class SignerTest {
         System.setProperty(JuseppeEnvVars.JuseppeEnvEnum.JUSEPPE_PRIVATE_KEY_PATH.mapping(), key.getAbsolutePath());
         System.setProperty(JuseppeEnvVars.JuseppeEnvEnum.JUSEPPE_CERT_PATH.mapping(), cert.getAbsolutePath());
 
-        Signature sign = new Signer(
-                populated().getKeyPath(),
-                singletonList(populated().getCertPath()),
-                singletonList(populated().getCertPath())
-        ).sign(new UpdateSite());
+        Signature sign = new Signer().sign(new UpdateSite());
 
         assertThat("sign", sign.getCorrectSignature(), notNullValue());
         assertThat("digest", sign.getCorrectDigest(), notNullValue());

@@ -42,6 +42,12 @@ import static ru.lanwen.jenkins.juseppe.props.Props.populated;
  */
 public class Signer {
     
+    public Signer() {
+        this.privateKey = new File(populated().getKeyPath());
+        this.certificates = new ArrayList<>(Collections.singletonList(new File(populated().getCertPath())));
+        this.rootCA = new ArrayList<>(Collections.singletonList(new File(populated().getCertPath())));
+    }
+
     public Signer(String privateKeyPath, List<String> certificatePaths, List<String> rootCAPaths) {
         this.privateKey = new File(privateKeyPath);
         this.certificates = new ArrayList<>(certificatePaths.stream().map(File::new).collect(Collectors.toList()));
