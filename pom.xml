@@ -3,7 +3,7 @@
 
     <groupId>ru.lanwen.jenkins</groupId>
     <artifactId>juseppe</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2-SNAPSHOT</version>
     
     <modules>
         <module>juseppe-core</module>
@@ -25,7 +25,7 @@
         <connection>scm:git:git://github.com/yandex-qatools/juseppe.git</connection>
         <developerConnection>scm:git:git@github.com:yandex-qatools/juseppe.git
         </developerConnection>
-        <tag>v1.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
     
     <dependencyManagement>
