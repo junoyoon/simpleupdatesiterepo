@@ -24,15 +24,17 @@ import static ru.lanwen.jenkins.juseppe.files.WatchFiles.watchFor;
 @Command(name = "serve", description = "starts the jetty server with Juseppe to serve generated json and plugins")
 public class ServeCommand extends JuseppeCommand {
 
-    private static final String JENKINS_PLUGIN_WILDCARD = "*.hpi";
+    private static final String HPI_EXT = "*.hpi";
+    private static final String JPI_EXT = "*.jpi";
+    
     private static final Logger LOG = LoggerFactory.getLogger(ServeCommand.class);
 
     @Arguments(title = "port", description = "Port to bind jetty on")
-    private int port = Props.populated().getPort();
+    private int port = -1;
 
     @Override
     public void unsafeRun(Props props) throws Exception {
-        Server server = new Server(port);
+        Server server = new Server(port == -1 ? props.getPort() : port);
         server.addLifeCycleListener(new GenStarter(props));
 
         if (isWatch()) {
@@ -46,10 +48,16 @@ public class ServeCommand extends JuseppeCommand {
                 Resource.newResource(props.getPluginsDir())
         ));
 
-        context.addServlet(new ServletHolder("update-site", new DefaultServlet()), "/" + props.getUcJsonName());
-        context.addServlet(new ServletHolder("release-history",
-                new DefaultServlet()), "/" + props.getReleaseHistoryJsonName());
-        context.addServlet(new ServletHolder("plugins", new DefaultServlet()), JENKINS_PLUGIN_WILDCARD);
+        context.addServlet(
+                new ServletHolder("update-site", new DefaultServlet()),
+                "/" + props.getUcJsonName()
+        );
+        context.addServlet(
+                new ServletHolder("release-history",
+                new DefaultServlet()), "/" + props.getReleaseHistoryJsonName()
+        );
+        context.addServlet(new ServletHolder("plugins-hpi", new DefaultServlet()), HPI_EXT);
+        context.addServlet(new ServletHolder("plugins-jpi", new DefaultServlet()), JPI_EXT);
 
         Slf4jRequestLog requestLog = new Slf4jRequestLog();
         requestLog.setLogDateFormat(null);
