@@ -18,7 +18,9 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
+import static ru.lanwen.jenkins.juseppe.props.Props.populated;
 
 /**
  * @author Merkushev Kirill (github: lanwen)
@@ -60,7 +62,11 @@ public class UpdateSiteGen {
         ).register(
                 site -> {
                     try {
-                        site.setSignature(new Signer().sign(site));
+                        site.setSignature(new Signer(
+                                props.getKeyPath(),
+                                singletonList(props.getCertPath()),
+                                singletonList(props.getCertPath())
+                        ).sign(site));
                     } catch (GeneralSecurityException | IOException e) {
                         throw new RuntimeException("Can't generate signature", e);
                     }

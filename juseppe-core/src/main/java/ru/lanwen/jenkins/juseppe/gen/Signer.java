@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.security.Security.addProvider;
@@ -40,24 +41,30 @@ import static ru.lanwen.jenkins.juseppe.props.Props.populated;
  * @author Kohsuke Kawaguchi
  */
 public class Signer {
+    
+    public Signer(String privateKeyPath, List<String> certificatePaths, List<String> rootCAPaths) {
+        this.privateKey = new File(privateKeyPath);
+        this.certificates = new ArrayList<>(certificatePaths.stream().map(File::new).collect(Collectors.toList()));
+        this.rootCA = new ArrayList<>(rootCAPaths.stream().map(File::new).collect(Collectors.toList()));
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(Signer.class);
 
     /**
      * Private key to sign the update center. Must be used in conjunction with certificates
      */
-    private File privateKey = new File(populated().getKeyPath());
+    private File privateKey;
 
     /**
      * X509 certificate for the private key given by the privateKey option.
      * Specify additional certificate options to pass in intermediate certificates, if any
      */
-    private List<File> certificates = new ArrayList<>(Collections.singleton(new File(populated().getCertPath())));
+    private List<File> certificates;
 
     /**
      * Additional root certificates. Should contain your certificate if it self-signed
      */
-    private List<File> rootCA = new ArrayList<>(Collections.singleton(new File(populated().getCertPath())));
+    private List<File> rootCA;
 
 
     /**
