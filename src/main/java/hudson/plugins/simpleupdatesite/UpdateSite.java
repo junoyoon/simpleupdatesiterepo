@@ -6,9 +6,9 @@ package hudson.plugins.simpleupdatesite;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -21,7 +21,7 @@ import org.apache.commons.io.FileUtils;
  */
 public class UpdateSite {
 	public final int updateCenterVersion = 1;
-	public List<Plugin> plugins = new ArrayList<Plugin>();
+	public Map<String, Plugin> plugins = new HashMap<String, Plugin>();
 	public final String id = "simpleupdatesite";
 
 	/**
@@ -43,7 +43,9 @@ public class UpdateSite {
 			try {
 				Plugin plugin = new Plugin();
 				plugin.init(hpiFile, downloadBaseUrl);
-				this.plugins.add(plugin);
+				if(isNewestPlugin(plugin)) {
+					this.plugins.put(plugin.getName(), plugin);
+				}
 			} catch (IOException e) {
 				System.out.printf("Fail to get the %s info\n", hpiFile.getName());
 			}
@@ -60,7 +62,7 @@ public class UpdateSite {
 		jsonObject.put("updateCenterVersion", this.updateCenterVersion);
 		jsonObject.put("id", this.id);
 		JSONObject pluginsJSON = new JSONObject();
-		for (Plugin plugin : this.plugins) {
+		for (Plugin plugin : this.plugins.values()) {
 			pluginsJSON.element(plugin.getName(), plugin.toJSON());
 		}
 		jsonObject.put("plugins", pluginsJSON);
@@ -76,4 +78,22 @@ public class UpdateSite {
 	public String toUpdateCenterJSONString() {
 		return "updateCenter.post(\n" + toJSON().toString(4) + "\n);";
 	}
+	
+	private boolean isNewestPlugin(Plugin plugin) {
+		if(!this.plugins.containsKey(plugin.getName())) {
+			return true;
+		}
+		
+		String existingVersion = this.plugins.get(plugin.getName()).getVersion();
+		String pluginVersion = plugin.getVersion();
+		
+		try {
+			// Try comparing using {@link VersionNumber}
+			return new VersionNumber(pluginVersion).isNewerThan(new VersionNumber(existingVersion));
+		} catch(IllegalArgumentException e) {
+			// In case version numbers are strange, fall back to lexical comparison
+			return pluginVersion.compareTo(existingVersion) > 0;
+		}
+	}
+	
 }
