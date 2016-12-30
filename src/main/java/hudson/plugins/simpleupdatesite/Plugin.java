@@ -46,6 +46,10 @@ public class Plugin {
 	public String getName() {
 		return this.hpi.getName();
 	}
+	
+	public String getVersion() {
+		return this.hpi.getVersion();
+	}
 
 	private String getExcerpt(File hpiFile) {
 		try {

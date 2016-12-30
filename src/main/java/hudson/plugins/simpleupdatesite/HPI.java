@@ -52,10 +52,15 @@ public class HPI {
 
 	public static HPI loadHPI(File file) throws IOException {
 		JarFile jarFile = new JarFile(file);
-		ZipEntry entry = jarFile.getEntry("META-INF/MANIFEST.MF");
-		HPI hpi = new HPI();
-		hpi.init(jarFile.getManifest().getMainAttributes(), entry.getTime());
-		return hpi;
+		try {
+			ZipEntry entry = jarFile.getEntry("META-INF/MANIFEST.MF");
+			HPI hpi = new HPI();
+			hpi.init(jarFile.getManifest().getMainAttributes(), entry.getTime());
+			return hpi;
+		}
+		finally {
+			jarFile.close();
+		}
 	}
 
 	private void init(Attributes attributes, long timestamp) throws IOException {
@@ -192,6 +197,10 @@ public class HPI {
 
 	public String getName() {
 		return this.name;
+	}
+	
+	public String getVersion() {
+		return this.version;
 	}
 
 	public void setWiki(String wiki) {
