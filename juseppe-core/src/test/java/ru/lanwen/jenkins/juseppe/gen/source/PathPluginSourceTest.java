@@ -20,11 +20,25 @@ public class PathPluginSourceTest {
 
     @Test
     public void shouldFindAllPlugins() throws Exception {
-        List<Plugin> plugins = new PathPluginSource(Paths.get(getResource(PLUGINS_DIR_CLASSPATH).getFile()))
+        boolean recursiveWatch = false;
+        List<Plugin> plugins = new PathPluginSource(Paths.get(getResource(PLUGINS_DIR_CLASSPATH).getFile()),
+                                                    recursiveWatch)
                 .plugins();
 
         assertThat("plugins", plugins, hasSize(2));
         assertThat(plugins.stream().map(Plugin::getName).collect(toList()),
                 hasItems("clang-scanbuild-plugin", "jucies-sample-pipeline-dsl-extension"));
+    }
+
+    @Test
+    public void shouldFindAllPluginsRecursively() throws Exception {
+        boolean recursiveWatch = true;
+        List<Plugin> plugins = new PathPluginSource(Paths.get(getResource(PLUGINS_DIR_CLASSPATH).getFile()),
+                                                    recursiveWatch)
+                 .plugins();
+
+        assertThat("plugins", plugins, hasSize(4));
+        assertThat(plugins.stream().map(Plugin::getName).collect(toList()),
+                   hasItems("clang-scanbuild-plugin", "jucies-sample-pipeline-dsl-extension"));
     }
 }

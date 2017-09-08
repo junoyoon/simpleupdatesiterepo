@@ -22,6 +22,7 @@ import static java.lang.System.setProperty;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.everyItem;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 import static ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen.updateSite;
@@ -84,6 +85,7 @@ public class HPICreationTest {
                 .collect(toList());
 
         assertThat(contents, everyItem(containsString("clang-scanbuild-plugin")));
-        assertThat(contents, everyItem(containsString(Props.populated().getBaseurl() + "/clang-scanbuild-plugin.hpi")));
+        assertThat(contents, hasItem(containsString(Props.populated().getBaseurl() + "/clang-scanbuild-plugin.hpi")));
+        assertThat(contents, hasItem(containsString(Props.populated().getBaseurl() + "/plugins2/clang-scanbuild-plugin.hpi")));
     }
 }

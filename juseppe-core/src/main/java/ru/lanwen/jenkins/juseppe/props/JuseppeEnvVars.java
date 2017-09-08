@@ -17,6 +17,7 @@ public final class JuseppeEnvVars {
     static final String JUSEPPE_BASE_URI = "juseppe.baseurl";
     static final String JUSEPPE_UPDATE_CENTER_ID = "juseppe.update.center.id";
     static final String JUSEPPE_BIND_PORT = "juseppe.jetty.port";
+    static final String JUSEPPE_RECURSIVE_WATCH = "juseppe.recursive.watch";
 
     private JuseppeEnvVars() {
         throw new IllegalAccessError();
@@ -110,6 +111,16 @@ public final class JuseppeEnvVars {
             @Override
             public String resolved() {
                 return String.valueOf(populated().getPort());
+            }
+        },
+
+        JUSEPPE_RECURSIVE_WATCH(
+                 JuseppeEnvVars.JUSEPPE_RECURSIVE_WATCH,
+                 "watch for file changes recursively. Defaults to `true`"
+        ) {
+            @Override
+            public String resolved() {
+                return String.valueOf(populated().getRecursiveWatch());
             }
         };
 

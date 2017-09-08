@@ -67,6 +67,9 @@ public final class Props {
     @Property(JuseppeEnvVars.JUSEPPE_UPDATE_CENTER_ID)
     private String ucId = "juseppe";
 
+    @Property(JuseppeEnvVars.JUSEPPE_RECURSIVE_WATCH)
+    private boolean recursiveWatch = true;
+
     public String getUcId() {
         return ucId;
     }
@@ -103,6 +106,9 @@ public final class Props {
         return releaseHistoryJsonName;
     }
 
+    public boolean getRecursiveWatch() {
+        return recursiveWatch;
+    }
     
     public Props withPluginsDir(String plugins) {
         this.pluginsDir = plugins;
@@ -149,6 +155,11 @@ public final class Props {
         return this;
     }
 
+    public Props withRecursiveWatch(boolean recursiveWatch) {
+        this.recursiveWatch = recursiveWatch;
+        return this;
+    }
+
     public void setPluginsDir(String pluginsDir) {
         this.pluginsDir = pluginsDir;
     }
@@ -183,5 +194,9 @@ public final class Props {
 
     public void setUcId(String ucId) {
         this.ucId = ucId;
+    }
+
+    public void setRecursiveWatch(boolean recursiveWatch) {
+        this.recursiveWatch = recursiveWatch;
     }
 }

@@ -54,7 +54,7 @@ public class UpdateSiteGen {
                 site -> site.withUpdateCenterVersion(Props.UPDATE_CENTER_VERSION)
                         .withId(props.getUcId())
         ).register(
-                site -> Collections.singleton(new PathPluginSource(Paths.get(props.getPluginsDir())))
+                site -> Collections.singleton(new PathPluginSource(Paths.get(props.getPluginsDir()), props.getRecursiveWatch()))
                         .forEach(source -> site.getPlugins().addAll(source.plugins()))
         ).register(
                 site -> site.getPlugins()

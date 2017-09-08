@@ -2,14 +2,22 @@ package ru.lanwen.jenkins.juseppe.files;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen;
-import ru.lanwen.jenkins.juseppe.props.Props;
 
 import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.HashMap;
+import java.util.Map;
+
+import ru.lanwen.jenkins.juseppe.gen.UpdateSiteGen;
+import ru.lanwen.jenkins.juseppe.props.Props;
 
 import static java.lang.String.format;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
@@ -29,6 +37,7 @@ public class WatchFiles extends Thread {
     private WatchService watcher;
     private Path path;
     private Props props;
+    private Map<WatchKey, Path> keys;
 
     private WatchFiles() {
         setDaemon(true);
@@ -37,15 +46,12 @@ public class WatchFiles extends Thread {
     public WatchFiles configureFor(Props props) throws IOException {
         this.props = props;
         path = Paths.get(props.getPluginsDir());
+        this.keys = new HashMap<>();
         setName(format("file-watcher-%s", path.getFileName()));
 
-
         watcher = this.path.getFileSystem().newWatchService();
-        path.register(watcher,
-                ENTRY_CREATE,
-                ENTRY_DELETE,
-                ENTRY_MODIFY
-        );
+        walkAndRegisterDirectories(path);
+
         return this;
     }
 
@@ -53,7 +59,32 @@ public class WatchFiles extends Thread {
         return new WatchFiles().configureFor(props);
     }
 
+    /**
+     * Register the given directory with the WatchService;
+     * This function will be called by FileVisitor
+     */
+    private void registerDirectory(Path dir) throws IOException {
+        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+        keys.put(key, dir);
+    }
+
+    /**
+     * Register the given directory, and all its sub-directories,
+     * with the WatchService.
+     */
+    private void walkAndRegisterDirectories(final Path start) throws IOException {
+        // register directory and sub-directories
+        Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                registerDirectory(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         LOG.info("Start to watch for changes: {}", path);
         try {
@@ -61,12 +92,53 @@ public class WatchFiles extends Thread {
             WatchKey key = watcher.take();
             while (key != null) {
 
-                if (key.pollEvents().stream().anyMatch(hasExt(".hpi").or(hasExt(".jpi")))) {
-                    LOG.trace("HPI (JPI) list modify found!");
-                    UpdateSiteGen.updateSite(props).withDefaults().toSave().saveAll();
+                Path dir = keys.get(key);
+
+                if (dir == null) {
+                    LOG.error("{}: WatchKey: {} is not recognized!", getClass(), key.toString());
+                    continue;
                 }
 
-                key.reset();
+                key.pollEvents().forEach(event -> {
+                    WatchEvent.Kind kind = event.kind();
+
+                    // Context for directory entry event is the file name of entry
+                    Path name = ((WatchEvent<Path>) event).context();
+                    Path child = dir.resolve(name);
+                    String fileName = child.getFileName().toString();
+
+                    if (fileName.endsWith(".hpi") || fileName.endsWith(".jpi")) {
+                        LOG.trace("{}: HPI (JPI) list modify found!", getClass());
+                        UpdateSiteGen.updateSite(props).withDefaults().toSave().saveAll();
+                    }
+
+                    // print out event
+                    LOG.trace("{}: {}: {}\n", getClass(), event.kind().name(), child);
+
+                    // if directory is created, and watching recursively, then register it and its sub-directories
+                    if (kind == ENTRY_CREATE) {
+                        try {
+                            if (Files.isDirectory(child)) {
+                                walkAndRegisterDirectories(child);
+                            }
+                        } catch (IOException x) {
+                            LOG.debug("{}: Unable to access {}", getClass(), child);
+                        }
+                    }
+                });
+
+                // reset key and remove from set if directory is no longer accessible
+                boolean valid = key.reset();
+
+                if (!valid) {
+                    keys.remove(key);
+
+                    // all directories are inaccessible
+                    if (keys.isEmpty()) {
+                        LOG.error("{} WatchKey map is empty. All directories are inaccessible!", getClass());
+                        break;
+                    }
+                }
                 key = watcher.take();
             }
         } catch (InterruptedException e) {
