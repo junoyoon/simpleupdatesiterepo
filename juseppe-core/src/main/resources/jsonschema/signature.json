@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "certificates": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "correct_digest": {
+            "type": "string"
+        },
+        "correct_signature": {
+            "type": "string"
+        },
+        "digest": {
+            "type": "string"
+        },
+        "signature": {
+            "type": "string"
+        }
+    }
+}

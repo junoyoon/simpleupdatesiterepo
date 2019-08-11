@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "developerId": {
+            "type": "string"
+        },
+        "email": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string"
+        }
+    }
+}

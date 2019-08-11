@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "version": {
+            "type": "string"
+        },
+        "optional": {
+            "type": "boolean"
+        }
+    }
+}

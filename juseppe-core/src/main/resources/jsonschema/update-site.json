@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "updateCenterVersion": {
+            "type": "integer"
+        },
+
+        "id": {
+            "type": "string"
+        },
+
+        "plugins": {
+            "type": "array",
+            "items": {
+                "$ref": "plugin.json"
+            }
+        },
+
+        "signature": {
+            "$ref": "signature.json"
+        }
+    }
+}

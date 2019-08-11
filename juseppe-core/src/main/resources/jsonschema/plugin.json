@@ -1,0 +1,74 @@
+{
+    "type": "object",
+    "properties": {
+        "excerpt": {
+            "type": "string"
+        },
+        "url": {
+            "type": "string"
+        },
+
+        "releaseTimestamp": {
+            "type": "string"
+        },
+
+        "buildDate": {
+            "type": "string"
+        },
+
+        "version": {
+            "type": "string"
+        },
+
+        "title": {
+            "type": "string"
+        },
+
+        "wiki": {
+            "type": "string"
+        },
+
+        "compatibleSinceVersion": {
+            "type": "string"
+        },
+
+        "requiredCore": {
+            "type": "string"
+        },
+
+        "builtBy": {
+            "type": "string"
+        },
+
+        "name": {
+            "type": "string"
+        },
+
+        "group": {
+            "type": "string"
+        },
+
+        "sha1": {
+            "type": "string"
+        },
+
+        "sha512": {
+            "type": "string"
+        },
+
+        "dependencies": {
+            "type": "array",
+            "items": {
+                "$ref": "dependency.json"
+            }
+        },
+
+        "developers": {
+            "type": "array",
+            "items": {
+                "$ref": "developer.json"
+            }
+        }
+
+    }
+}
